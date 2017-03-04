@@ -1,0 +1,38 @@
+GridLayout {
+    margin-top: 20;
+    margin-bottom:10;
+    margin-left: 10;
+    margin-right: 10;
+    background-color: white;
+}
+StackLayout {
+
+    margin-left: 30;
+    margin-right: 30;
+    background-color: white;
+}
+Label {
+    margin-top: 5;
+    margin-bottom: 5;
+    text-align: center;
+}
+Button, TextField {
+    margin-top: 5;
+    margin-bottom: 5;
+}
+.save {
+    background-color: dodgerblue;
+    color: black;
+    margin-top: 20;
+}
+.date-layout {
+    margin-top: 5;
+    margin-bottom: 5;
+}
+.date-button{
+    background-color: dodgerblue;
+    color: black;
+}
+.date-label{
+    text-align: left;
+}

@@ -1,0 +1,21 @@
+GridLayout {
+    margin-top: 20;
+    margin-bottom:10;
+    margin-left: 10;
+    margin-right: 10;
+    background-color: white;
+}StackLayout {
+    margin-left: 30;
+    margin-right: 30;
+    background-color: white;
+}
+Button, TextField {
+    margin-left: 16;
+    margin-right: 16;
+    margin-bottom: 10;
+}
+.get-started-button {
+    background-color: dodgerblue;
+    color: black;
+    margin-top: 20;
+}

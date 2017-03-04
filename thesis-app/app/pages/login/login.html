@@ -1,0 +1,28 @@
+<GridLayout rows="auto, *">
+    <ActionBar
+            title="Login"
+            android.icon="res://icon"
+            android.iconVisibility="always"
+    >
+        <NavigationButton
+                text="Go Back"
+                android.systemIcon="ic_menu_back"
+                tap="onNavBtnTap"></NavigationButton>
+    </ActionBar>
+    <StackLayout #container row="1">
+        <TextField #email
+                   autocapitalizationType = "none"
+                   autocorrect="false"
+                   hint="email"
+                   [(ngModel)]="account.email"></TextField>
+        <TextField #password
+                   hint="password"
+                   secure="true"
+                   [(ngModel)]="account.password"></TextField>
+        <Button
+                text="Login"
+                class="login"
+                (tap)="login()">
+        </Button>
+    </StackLayout>
+</GridLayout>
