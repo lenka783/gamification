@@ -1,11 +1,9 @@
 #!/bin/bash
 echo "Program ’git_diff.sh’ starts now."
 
-#echo “Absolute path to git directory, followed by [ENTER]: ”
-#read directory_path
-#cd directory_path
-cd /Users/Lenka/Downloads/BcTryOuts/nativescript
-echo $PWD
+echo “Absolute path to git directory, followed by [ENTER]: ”
+read directory_path
+cd $directory_path
 
 git pull
 echo “Git pull DONE!”
