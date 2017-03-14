@@ -63,9 +63,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
         dateLabel.visibility = this.datePickerIsVisible ? "visible" : "collapse";
         dateButton.text = dateButton.text = this.datePickerIsVisible ? "Choose date" : "Submit date";
 
-        if (this.datePickerIsVisible) {
-            this.account.dateOfBirth = datePicker.date;
-        }
+        console.log("Account's date of birth: " + this.account.dateOfBirth);
 
         this.datePickerIsVisible = !this.datePickerIsVisible;
     }

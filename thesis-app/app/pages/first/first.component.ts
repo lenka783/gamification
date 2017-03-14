@@ -13,10 +13,7 @@ import { Repository, RepositoryApi, LoopBackConfig, Config} from "../../shared/i
 })
 
 export class FirstComponent implements OnInit {
-    repositoryList: Array<Repository> = [];
-
-    name: string;
-    content: string;
+    private repositoryList: Array<Repository> = [];
 
     constructor( private _router: Router, private _page: Page, private _repository: RepositoryApi) {
         LoopBackConfig.setBaseURL(Config.BASE_URL);
@@ -25,7 +22,12 @@ export class FirstComponent implements OnInit {
 
     ngOnInit (){
         this._page.actionBarHidden = false;
+        this._repository.find()
+            .subscribe( (loadedRepositories: any) => ( this.repositoryList = loadedRepositories ));
     }
 
+    showInfo(repository: Repository) {
+        alert(repository.content);
+    }
     
 }

@@ -20,6 +20,7 @@
                 hint="Last Name"></TextField>
         <GridLayout rows="auto, auto" class="date-layout">
             <DatePicker #datePicker
+                        [(ngModel)]="account.dateOfBirth"
                         visibility="collapse"
                         row="0"></DatePicker>
             <Label #dateLabel

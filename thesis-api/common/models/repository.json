@@ -20,9 +20,7 @@
       "required": true
     },
     "content": {
-      "type": [
-        "number"
-      ],
+      "type": "string",
       "required": true
     }
   },

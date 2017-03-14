@@ -5,7 +5,7 @@ export interface RepositoryInterface {
   name: string;
   gitCommand: string;
   date: Date;
-  content: Array<number>;
+  content: string;
   id?: any;
 }
 
@@ -13,7 +13,7 @@ export class Repository implements RepositoryInterface {
   name: string;
   gitCommand: string;
   date: Date;
-  content: Array<number>;
+  content: string;
   id: any;
   constructor(data?: RepositoryInterface) {
     Object.assign(this, data);
@@ -60,7 +60,7 @@ export class Repository implements RepositoryInterface {
         },
         content: {
           name: 'content',
-          type: 'Array&lt;number&gt;'
+          type: 'string'
         },
         id: {
           name: 'id',
