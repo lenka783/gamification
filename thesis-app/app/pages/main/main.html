@@ -1,6 +1,8 @@
-<ActionBar title="Main Page"></ActionBar>
-<StackLayout #mainContainer >
-
+<ActionBar title="Main Page">
+        <NavigationButton visibility="collapsed"></NavigationButton>
+</ActionBar>
+<GridLayout>
+<StackLayout>
     <Button
             text="Get started!"
             class="get-started-button"
@@ -12,5 +14,5 @@
             (tap)="login()">
             >
     </Button>
-
 </StackLayout>
+</GridLayout>

@@ -1,10 +1,15 @@
 /* tslint:disable */
+import {
+  Game,
+  Repository
+} from '../index';
 
 declare var Object: any;
 export interface AccountInterface {
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
+  contributorName?: string;
   realm?: string;
   username?: string;
   password: string;
@@ -13,12 +18,15 @@ export interface AccountInterface {
   verificationToken?: string;
   id?: any;
   accessTokens?: any[];
+  games?: Game[];
+  projects?: Repository[];
 }
 
 export class Account implements AccountInterface {
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
+  contributorName: string;
   realm: string;
   username: string;
   password: string;
@@ -27,6 +35,8 @@ export class Account implements AccountInterface {
   verificationToken: string;
   id: any;
   accessTokens: any[];
+  games: Game[];
+  projects: Repository[];
   constructor(data?: AccountInterface) {
     Object.assign(this, data);
   }
@@ -70,6 +80,10 @@ export class Account implements AccountInterface {
           name: 'dateOfBirth',
           type: 'Date'
         },
+        contributorName: {
+          name: 'contributorName',
+          type: 'string'
+        },
         realm: {
           name: 'realm',
           type: 'string'
@@ -104,6 +118,16 @@ export class Account implements AccountInterface {
           name: 'accessTokens',
           type: 'any[]',
           model: ''
+        },
+        games: {
+          name: 'games',
+          type: 'Game[]',
+          model: 'Game'
+        },
+        projects: {
+          name: 'projects',
+          type: 'Repository[]',
+          model: 'Repository'
         },
       }
     }

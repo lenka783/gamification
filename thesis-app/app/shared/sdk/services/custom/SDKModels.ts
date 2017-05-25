@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { User } from '../../models/User';
 import { Account } from '../../models/Account';
 import { Repository } from '../../models/Repository';
+import { Game } from '../../models/Game';
+import { Achievement } from '../../models/Achievement';
+import { RepositoryContributor } from '../../models/RepositoryContributor';
 
 export interface Models { [name: string]: any }
 
@@ -13,6 +16,9 @@ export class SDKModels {
     User: User,
     Account: Account,
     Repository: Repository,
+    Game: Game,
+    Achievement: Achievement,
+    RepositoryContributor: RepositoryContributor,
     
   };
 

@@ -43,5 +43,17 @@
   "Repository": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "Game": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "Achievement": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "RepositoryContributor": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

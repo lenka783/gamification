@@ -4,9 +4,9 @@
   "main": "server/server.js",
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
-    "posttest": "npm run lint && nsp check",
-    "build:sdk": "./node_modules/.bin/lb-sdk server/server.js ../thesis-app/app/shared/sdk -d nativescript2 -i enabled"
+    "build:sdk": "chmod +x ./scripts/buildSDK.sh && ./scripts/buildSDK.sh",
+    "start": "npm run build:sdk && node .",
+    "posttest": "npm run lint && nsp check"
   },
   "dependencies": {
     "compression": "^1.0.3",

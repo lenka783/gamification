@@ -5,10 +5,10 @@
   "repository": "<fill-your-repository-here>",
   "nativescript": {
     "id": "org.nativescript.thesisapp",
-    "tns-ios": {
+    "tns-android": {
       "version": "2.5.0"
     },
-    "tns-android": {
+    "tns-ios": {
       "version": "2.5.0"
     }
   },
@@ -23,11 +23,14 @@
     "@angular/router": "3.4.3",
     "email-validator": "^1.0.7",
     "nativescript-angular": "1.4.0",
+    "nativescript-iqkeyboardmanager": "^1.0.1",
+    "nativescript-local-notifications": "^1.2.1",
     "nativescript-socketio": "^2.2.9",
+    "nativescript-telerik-ui": "^1.6.2",
     "nativescript-theme-core": "~1.0.2",
     "reflect-metadata": "~0.1.8",
     "rxjs": "~5.0.1",
-    "tns-core-modules": "2.5.1"
+    "tns-core-modules": "^2.5.2"
   },
   "devDependencies": {
     "@types/socket.io-client": "^1.4.29",

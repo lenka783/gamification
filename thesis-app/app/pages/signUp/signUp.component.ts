@@ -8,6 +8,9 @@ import { Page } from "ui/page";
 import { Label } from "ui/label";
 import { Button } from "ui/button";
 import { DatePicker } from "ui/date-picker";
+import { TextField } from "ui/text-field";
+
+import dialogs = require("ui/dialogs");
 
 import {
     Account,
@@ -37,6 +40,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
     @ViewChild("dateButton") dateButton: ElementRef;
     @ViewChild("email") email: ElementRef;
     @ViewChild("password") password: ElementRef;
+    @ViewChild("passwordValidation") passwordValidation: ElementRef;
     @ViewChild("submitButton") submitButton: ElementRef;
 
     constructor(private _router: Router, private _page: Page, private _account: AccountApi) {
@@ -73,24 +77,87 @@ export class SignUpComponent implements OnInit, OnDestroy {
             account.email == this.account.email;
         })
         if (accounts.isEmpty) {
-            this._account.create(this.account).subscribe(
-                result => {
-                    this._account.login(this.account).subscribe(
-                        result => this._router.navigate(['first']),
-                        error => alert("Error occured" + error.message));
-                },
-                error => this.registerErrorHandler());
+            if (this.passwordIsConfirmed()) {
+                this._account.create(this.account).subscribe(
+                    result => {
+                        this._account.login(this.account).subscribe(
+                            result => this._router.navigate(['profile']),
+                            error => {
+                                console.log("Problem occured while connecting to server");
+                                dialogs.alert({
+                                    title: "Server connection failed",
+                                    message: "Could not connect to the server, try again later.",
+                                    okButtonText: "Ok"
+                                });
+                            });
+                    },
+                    error => this.registerErrorHandler());
+            } else {
+                alert("Passwords must match!");
+            }
         } else {
             alert("There already is an account for given email.");
         }
 
+
     }
 
     private registerErrorHandler() {
-        if (!hasValidEmail(this.account)) {
-            alert("This is not a valid email address!");
-        } else {
-            alert("Please fill out the form completely!");
+        if (!this.isCompletelyFilled()) {
+            dialogs.alert({
+                title: "Form not filled",
+                message: "Please fill out the form completely!",
+                okButtonText: "Ok"
+            });
+            return;
         }
+        if (!hasValidEmail(this.account)) {
+            dialogs.alert({
+                title: "Invalid email",
+                message: "Write a proper email address.",
+                okButtonText: "Ok"
+            });
+            return;
+        }
+
+        this._account.find({
+            where: {
+                email: this.account.email
+            }
+        }).subscribe(
+            res => {
+                if (res.length != 0) {
+                    console.log("Account for given email already exists!");
+                    dialogs.alert({
+                        title: "Email already exists!",
+                        message: "Account for given email already exists, choose another email.",
+                        okButtonText: "Ok"
+                    });
+                }
+            },
+            err => {
+                console.log("Problem occured while connecting to server");
+                    dialogs.alert({
+                        title: "Server connection failed",
+                        message: "Could not connect to the server, try again later.",
+                        okButtonText: "Ok"
+                    });
+            }
+        );
+    }
+
+    private passwordIsConfirmed(): Boolean {
+        let passwordValidation = <TextField>this.passwordValidation.nativeElement;
+        if (this.account.password != passwordValidation.text) {
+            return false;
+        }
+        return true;
+    }
+
+    private isCompletelyFilled(): Boolean {
+        return this.account.firstName != null
+            && this.account.lastName != null
+            && this.account.password != null
+            && this.account.email != null;
     }
 }

@@ -4,6 +4,7 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptRouterModule }from "nativescript-angular/router";
+import { NativeScriptUISideDrawerModule } from "nativescript-telerik-ui/sidedrawer/angular"
 
 import { SocketConnection } from "./shared/sdk/sockets/socket.connections";
 import { SocketDriver } from "./shared/sdk/sockets/socket.driver";
@@ -27,7 +28,8 @@ import { AppComponent } from "./app.component";
         NativeScriptHttpModule,
         NativeScriptFormsModule,
         NativeScriptRouterModule,
-        NativeScriptRouterModule.forRoot(routes)
+        NativeScriptRouterModule.forRoot(routes),
+        NativeScriptUISideDrawerModule
     ],
     providers: [
         SocketConnection,

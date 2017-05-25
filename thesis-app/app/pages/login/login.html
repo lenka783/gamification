@@ -1,9 +1,5 @@
 <GridLayout rows="auto, *">
-    <ActionBar
-            title="Login"
-            android.icon="res://icon"
-            android.iconVisibility="always"
-    >
+    <ActionBar title="Login">
         <NavigationButton
                 text="Go Back"
                 android.systemIcon="ic_menu_back"
@@ -21,7 +17,7 @@
                    [(ngModel)]="account.password"></TextField>
         <Button
                 text="Login"
-                class="login"
+                class="loginButton"
                 (tap)="login()">
         </Button>
     </StackLayout>

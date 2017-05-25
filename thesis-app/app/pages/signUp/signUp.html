@@ -1,55 +1,21 @@
 <GridLayout rows="auto, *">
-    <ActionBar
-        title="SignUp"
-        android.icon="res://icon"
-        android.iconVisibility="always"
-        >
-        <NavigationButton
-                text="Go Back"
-                android.systemIcon="ic_menu_back"
-                tap="onNavBtnTap"></NavigationButton>
+    <ActionBar title="SignUp">
+        <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" tap="onNavBtnTap"></NavigationButton>
     </ActionBar>
     <StackLayout #container row="1">
-        <TextField #firstName
-                [(ngModel)]="account.firstName"
-                autocorrect="false"
-                hint="First Name"></TextField>
-        <TextField #lastName
-                [(ngModel)]="account.lastName"
-                autocorrect="false"
-                hint="Last Name"></TextField>
+        <TextField #firstName [(ngModel)]="account.firstName" autocorrect="false" hint="First Name"></TextField>
+        <TextField #lastName [(ngModel)]="account.lastName" autocorrect="false" hint="Last Name"></TextField>
+
         <GridLayout rows="auto, auto" class="date-layout">
-            <DatePicker #datePicker
-                        [(ngModel)]="account.dateOfBirth"
-                        visibility="collapse"
-                        row="0"></DatePicker>
-            <Label #dateLabel
-                   visibility="visible"
-                   row="0"
-                   [text]='account.dateOfBirth | date:"fullDate"'></Label>
-            <Button #dateButton
-                       row="1"
-                       class="date-button"
-                       text="Choose date"
-                       (tap)="dateButtonTap()"></Button>
+            <DatePicker #datePicker [(ngModel)]="account.dateOfBirth" visibility="collapse" row="0"></DatePicker>
+            <Label #dateLabel visibility="visible" row="0" [text]='account.dateOfBirth | date:"fullDate"'></Label>
+                
+            <Button #dateButton row="1" class="buttons" text="Choose date of birth" (tap)="dateButtonTap()"></Button>
         </GridLayout>
-        <TextField #email
-                [(ngModel)]="account.email"
-                autocapitalizationType = "none"
-                autocorrect="false"
-                hint="Email"
-                keyboardType="email"></TextField>
-        <TextField #password
-                [(ngModel)]="account.password"
-                autocorrect="false"
-                hint="Password"
-                secure="true"></TextField>
-        <TextField #passwordValidation
-                autocorrect="false"
-                hint="Repeat password"
-                secure="true"></TextField>
-        <Button #submitButton
-                text="Submit"
-                (tap)="register()"></Button>
+        
+        <TextField #email [(ngModel)]="account.email" autocapitalizationType = "none" autocorrect="false" hint="Email" keyboardType="email"></TextField>
+        <TextField #password [(ngModel)]="account.password" autocorrect="false" hint="Password" secure="true"></TextField>
+        <TextField #passwordValidation autocorrect="false" hint="Repeat password" secure="true"></TextField>
+        <Button #submitButton class="buttons" text="Submit" (tap)="register()"></Button>
     </StackLayout>
 </GridLayout>

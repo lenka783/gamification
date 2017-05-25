@@ -3,8 +3,8 @@
  */
 import { Component, OnInit } from "@angular/core";
 
-import {Page} from "ui/page";
-import {Router} from "@angular/router";
+import { Page } from "ui/page";
+import { Router } from "@angular/router";
 
 @Component ({
     selector: "main",

@@ -1,0 +1,20 @@
+.drawerContentText {
+    font-size: 30;
+    padding: 10;
+}
+.sideStackLayout {
+    background-color: #4d4d4d;
+}
+.sideButton {
+    font-size: 20;
+    padding: 15;
+    margin-right: 10;
+    border-radius: 8px;
+    color: black;
+}
+.sideFirstLevelButton {
+    background-color: lightgray;
+    margin-bottom: 5;
+    margin-top: 5;
+    margin-left: 10;
+}

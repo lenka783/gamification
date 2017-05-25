@@ -1,0 +1,30 @@
+ActionBar {
+    background-color: #4d4d4d;
+    color: whitesmoke;
+}
+GridLayout {
+    background-color: #f2f2f2;
+}
+ListView {
+  margin-left: 10;
+  margin-right: 10;
+  background-color: #f2f2f2;
+  
+}
+Button {
+    font-size: 20;
+    border-radius: 8px;
+}
+.freeToJoin {
+    margin-right: 5;
+    background-color: #4d4d4d;
+    color: whitesmoke;
+}
+.joined {
+    margin-left: 5;
+    background-color: maroon;
+    color: whitesmoke;
+}
+.listViewLine {
+    padding: 15;
+}

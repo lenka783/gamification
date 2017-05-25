@@ -5,7 +5,10 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
-        "noEmitOnError": true
+        "noEmitOnError": true,
+        "types": [
+            "socket.io-client"
+        ]
     },
     "exclude": [
         "node_modules",

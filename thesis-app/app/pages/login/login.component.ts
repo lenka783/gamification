@@ -5,15 +5,13 @@ import { Page } from "ui/page";
 import { TextField } from "ui/text-field";
 import { Color } from "color";
 
-import { 
-    Account, 
-    AccountApi,
-    LoopBackConfig,
-    Config
-} from "../../shared";
+import { LoopBackConfig, Config } from "../../shared";
+import { AccountApi } from "../../shared/sdk/services";
+import { Account } from "../../shared/sdk/models";
 
 
 import { ObservableArray } from 'data/observable-array';
+import dialogs = require("ui/dialogs");
 
 @Component ({
     selector: "login",
@@ -36,16 +34,60 @@ export class LoginComponent implements OnInit {
             LoopBackConfig.setApiVersion(Config.API_VERSION);
             if (this._account.isAuthenticated())
                 this._router.navigate(['first']);
+
+            this.account.email = "admin@thesis.cz";
+            this.account.password = "admin";
     }
 
     ngOnInit() {
         this._page.actionBarHidden = false;
+        console.log("Current cached account: " + (<Account>this._account.getCachedCurrent()));
+        console.log("Account email: " + this.account.email);
     }
 
     login() {
         this._account.login(this.account)
-        .subscribe(res => this._router.navigate(['first']), err => alert(err));
-        
+        .subscribe(
+            res => {
+                console.log("loginOK");
+                this._router.navigate(['profile']);
+            }, 
+            err => {
+                this.errorHandler();
+            });
     }
 
+    errorHandler() {
+        this._account.find({
+            where: {
+                email: this.account.email
+            }
+        }).subscribe(
+            res => {
+                if (res.length == 0) {
+                    console.log("No account found for given email!");
+                    dialogs.alert({
+                        title: "Wrong email!",
+                        message: "No account found for given email, register first!",
+                        okButtonText: "Ok"
+                    });
+                } else {
+                    console.log("Wrong password");
+                    dialogs.alert({
+                        title: "Wrong password!",
+                        message: "Please try again with the correct password!",
+                        okButtonText: "Ok"
+                    });
+                }
+            },
+            err => {
+                console.log("Problem occured while connecting to server");
+                    dialogs.alert({
+                        title: "Server connection failed",
+                        message: "Could not connect to the server, try again later.",
+                        okButtonText: "Ok"
+                    });
+            }
+        );
+    }
 }

@@ -13,6 +13,8 @@ export class AppComponent {
     constructor(private _router: Router, private _account: AccountApi) {
         if (!this._account.isAuthenticated()) {
             this._router.navigate(['MainComponent']);
+        } else {
+            this._router.navigate(["profile"])
         }
     }
 }

@@ -1,23 +1,28 @@
+ActionBar {
+    background-color: #4d4d4d;
+    color: whitesmoke;
+}
+GridLayout {
+    background-color: #f2f2f2;
+}
 StackLayout {
     margin-left: 30;
     margin-right: 30;
-    background-color: white;
-}
-Image {
-    margin-top: 5;
-    margin-bottom: 20;
+    background-color: #f2f2f2;
 }
 Button, TextField {
     margin-left: 16;
     margin-right: 16;
     margin-bottom: 10;
+    border-radius: 8px;
+    padding: 15;
 }
 .get-started-button {
-    background-color: dodgerblue;
-    color: black;
+    background-color: #4d4d4d;
+    color: white;
     margin-top: 20;
 }
 .already-member-button {
-    background-color: lightskyblue;
-    color: black;
+    background-color: gray;
+    color: white;
 }

@@ -48,6 +48,9 @@ import { RealTime } from './services/core/real.time';
 import { UserApi } from './services/custom/User';
 import { AccountApi } from './services/custom/Account';
 import { RepositoryApi } from './services/custom/Repository';
+import { GameApi } from './services/custom/Game';
+import { AchievementApi } from './services/custom/Achievement';
+import { RepositoryContributorApi } from './services/custom/RepositoryContributor';
 /**
 * Have Fun!!!
 * - Jon

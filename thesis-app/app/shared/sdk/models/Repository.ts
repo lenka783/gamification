@@ -1,20 +1,21 @@
 /* tslint:disable */
+import {
+  Account
+} from '../index';
 
 declare var Object: any;
 export interface RepositoryInterface {
-  name: string;
-  gitCommand: string;
-  date: Date;
-  content: string;
+  projectName: string;
+  gitAddress: string;
   id?: any;
+  contributors?: Account[];
 }
 
 export class Repository implements RepositoryInterface {
-  name: string;
-  gitCommand: string;
-  date: Date;
-  content: string;
+  projectName: string;
+  gitAddress: string;
   id: any;
+  contributors: Account[];
   constructor(data?: RepositoryInterface) {
     Object.assign(this, data);
   }
@@ -44,22 +45,14 @@ export class Repository implements RepositoryInterface {
   public static getModelDefinition() {
     return {
       name: 'Repository',
-      plural: 'repositories',
+      plural: 'Repositories',
       properties: {
-        name: {
-          name: 'name',
+        projectName: {
+          name: 'projectName',
           type: 'string'
         },
-        gitCommand: {
-          name: 'gitCommand',
-          type: 'string'
-        },
-        date: {
-          name: 'date',
-          type: 'Date'
-        },
-        content: {
-          name: 'content',
+        gitAddress: {
+          name: 'gitAddress',
           type: 'string'
         },
         id: {
@@ -68,6 +61,11 @@ export class Repository implements RepositoryInterface {
         },
       },
       relations: {
+        contributors: {
+          name: 'contributors',
+          type: 'Account[]',
+          model: 'Account'
+        },
       }
     }
   }

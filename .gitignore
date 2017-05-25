@@ -13,12 +13,8 @@
 
 .DS_Store
 
-thesis-api/.idea
-thesis-api/.project
-thesis-api/.strong-pm
-thesis-api/coverage
 thesis-api/node_modules
-thesis-api/npm-debug.log
+thesis-api/server/datasources.json
 
 thesis-app/.idea
 thesis-app/.vscode
@@ -30,3 +26,6 @@ thesis-app/hooks/
 thesis-app/lib/
 thesis-app/tmp/
 thesis-app/typings/
+thesis-app/app/shared/sdk/*
+
+.vscode
