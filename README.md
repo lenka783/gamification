@@ -98,6 +98,7 @@ thesis-api/scripts user$  ./createTestData.js
 ```
 
 ##Next steps
+
 You can modify and use enclosed files createGames.js and createTestData.js when creating you own games or adding your own repositories.
 All you need to do is just replace test data with your actual data.
 
