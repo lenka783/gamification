@@ -33,12 +33,12 @@ function createGames(callback) {
                 },
                 {
                     Name: "loggingGame",
-                    CommonName: "Log writing game",
+                    CommonName: "Proper logging game",
                     GitSearchPattern: "[Ll]og"
                 },
                 {
                     Name: "goodCollaboratorGame",
-                    CommonName: "Good commiter game",
+                    CommonName: "Good collaborator game",
                     GitSearchPattern: "."
                 }];
             collection.insert(games, { w: 1 }, (err, result) => {

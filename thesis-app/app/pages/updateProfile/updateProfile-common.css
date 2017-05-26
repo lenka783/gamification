@@ -18,11 +18,11 @@ TextField, Button {
     padding: 15;
 }
 .submit {
-    margin-left: 15;
-    margin-right: 15;
     background-color: #4d4d4d;
-    color: white;
-    margin-top: 20;
+    color: whitesmoke;
+    padding: 15;
+    margin: 10;
+    border-radius: 8px;
 }
 .update {
     border-radius: 8px;

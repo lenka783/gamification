@@ -29,10 +29,10 @@
     <GridLayout tkMainContent rows="*">
         <ListView row="0" [items]="gameList" class="medium-spacing">
             <template let-item="item">
-                <GridLayout columns="*, 65, 65" class="listViewLine">
-                    <Label [text]="item.CommonName" col="0" textWrap="true"></Label>
-                    <Button text="Join" class="freeToJoin" (tap)="join(item)" col="1"></Button>
-                    <Button text="Leave" class="joined" (tap)="leave(item)" col="2"></Button>
+                <GridLayout columns="auto, auto, auto" class="listViewLine">
+                    <Label [text]="item.CommonName" col="0" textWrap="true" width="50%" class="androidLabel"></Label>
+                    <Button text="Join" class="join" col="1" (tap)="join(item)" width="20%"></Button>
+                    <Button text="Leave" class="leave" col="2" (tap)="leave(item)" width="20%"></Button>
                 </GridLayout>
             </template>
         </ListView>

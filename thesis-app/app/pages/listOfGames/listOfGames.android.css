@@ -1,3 +1,6 @@
 ActionBar{
     padding-top: 10;
 }
+Label {
+    word-wrap: true;
+}
