@@ -26,7 +26,7 @@
         </GridLayout>
     </StackLayout>
 
-    <GridLayout tkMainContent rows="*, auto, ">
+    <GridLayout tkMainContent class="mainContentGrid" rows="*, auto, ">
         <GridLayout class="profileInfo" row="0" rows="auto, auto, auto, auto, auto, auto, auto">
             <GridLayout columns="auto, *" class="profileInfoLine" row="0">
                 <Label col="0" text="Name: "></Label>
@@ -57,7 +57,7 @@
                 <Label col="1" [text]="account.games.length"></Label>
             </GridLayout>
         </GridLayout>
-        <Button text="Update profile" class="profileInfoLine" (tap)="updateProfile()" row="1"></Button>
+        <Button text="Update profile" class="updateButton" (tap)="updateProfile()" row="1"></Button>
     </GridLayout>
 
 </RadSideDrawer>

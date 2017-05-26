@@ -7,7 +7,7 @@ import { Color } from "color";
 
 import { LoopBackConfig, Config } from "../../shared";
 import { AccountApi } from "../../shared/sdk/services";
-import { Account } from "../../shared/sdk/models";
+import { Account, AccessToken } from "../../shared/sdk/models";
 
 
 import { ObservableArray } from 'data/observable-array';
@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit {
             LoopBackConfig.setApiVersion(Config.API_VERSION);
             if (this._account.isAuthenticated())
                 this._router.navigate(['first']);
-
             this.account.email = "admin@thesis.cz";
             this.account.password = "admin";
     }
@@ -46,13 +45,15 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
+        console.log("Accounts creditentials: email={0}, password=$s", this.account.email, this.account.password)
         this._account.login(this.account)
         .subscribe(
-            res => {
+            (res: AccessToken) => {
                 console.log("loginOK");
                 this._router.navigate(['profile']);
             }, 
             err => {
+                console.log("ERROR (login) " + err.message);
                 this.errorHandler();
             });
     }
@@ -81,7 +82,7 @@ export class LoginComponent implements OnInit {
                 }
             },
             err => {
-                console.log("Problem occured while connecting to server");
+                console.log("Problem occured while connecting to server: " + err.message);
                     dialogs.alert({
                         title: "Server connection failed",
                         message: "Could not connect to the server, try again later.",

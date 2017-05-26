@@ -27,4 +27,5 @@ Button {
 }
 .listViewLine {
     padding: 15;
+    height: 80;
 }
