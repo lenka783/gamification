@@ -30,15 +30,15 @@
         <GridLayout row="0" class="profileInfo" rows="auto, auto, auto">
             <GridLayout columns="auto, *" row="0">
                 <Label col="0" text="Name: "></Label>
-                <TextField col="1" [(ngModel)]="account.firstName" class="border"></TextField>
+                <TextField col="1" [(ngModel)]="firstName" class="border"></TextField>
             </GridLayout>
             <GridLayout columns="auto, *" row="1">
                 <Label col="0" text="Surname: "></Label>
-                <TextField col="1" [(ngModel)]="account.lastName" class="border"></TextField>
+                <TextField col="1" [(ngModel)]="lastName" class="border"></TextField>
             </GridLayout>
             <GridLayout columns="auto, *" row="2">
                 <Label col="0" text="Contributor name: "></Label>
-                <TextField col="1" [(ngModel)]="account.contributorName" class="border"></TextField>
+                <TextField col="1" [(ngModel)]="contributorName" class="border"></TextField>
             </GridLayout>
         </GridLayout>
         <Button text="Submit" class="submit" (tap)="updateProfile()" row="1"></Button>
