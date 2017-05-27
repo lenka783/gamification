@@ -1,17 +1,18 @@
-import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable } from "data/observable";
 import { ObservableArray } from "data/observable-array";
 
 import { Page } from "ui/page";
 import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
+import { ModalDialogService } from "nativescript-angular/modal-dialog";
 
 import { LoopBackConfig, Config, SideDrawerNavigation } from "../../shared/index";
 import { Account, Achievement, Game, Repository, RepositoryContributor } from "../../shared/sdk/models/index";
 import { AchievementApi, GameApi, AccountApi, RepositoryApi, RepositoryContributorApi } from "../../shared/sdk/services/index";
+import { Dialogs } from "../../shared/modalViews/index";
 
 import application = require("application");
-import dialogs = require("ui/dialogs");
 
 import LocalNotifications = require("nativescript-local-notifications");
 
@@ -33,6 +34,8 @@ export class ListOfGamesComponent extends Observable implements OnInit {
     private IsDrawerOpen: boolean;
     private sideDrawerNavigation: SideDrawerNavigation;
     private project: Repository;
+    private listLoaded = false;
+    private dialogs: Dialogs;
 
     constructor(
         private _router: Router,
@@ -41,12 +44,15 @@ export class ListOfGamesComponent extends Observable implements OnInit {
         private _game: GameApi,
         private _account: AccountApi,
         private _achievement: AchievementApi,
-        private _contributor: RepositoryContributorApi) {
+        private _contributor: RepositoryContributorApi,
+        private _modalService: ModalDialogService,
+        private vcRef: ViewContainerRef) {
         super();
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
         this.sideDrawerNavigation = new SideDrawerNavigation(_router);
+        this.dialogs = new Dialogs(_modalService, vcRef);
     }
 
     loadAccount() {
@@ -67,13 +73,19 @@ export class ListOfGamesComponent extends Observable implements OnInit {
         this.updateAccountProjects();
         this.IsIOsApp = Config.IOS_APP;
         this.IsDrawerOpen = false;
-        if (this.account.contributorName == null) {
-            dialogs.alert({
-                title: "Missing contributor name.",
-                message: "Please update your contributor name in profile section to attend game!",
-                okButtonText: "Ok"
-            }).then(() => this._router.navigate(['profile']));
-        }
+    }
+
+    hasContributorNameAssigned() {
+        return this.account.contributorName != null || this.account.contributorName.length > 0;
+    }
+
+    updateGames() {
+        this._game.find().subscribe(
+            (loadedGames: any) => {
+                this.gameList = loadedGames;
+                this.listLoaded = true;
+            },
+            error => console.log(error.message));
     }
 
     updateAccountGames() {
@@ -108,35 +120,33 @@ export class ListOfGamesComponent extends Observable implements OnInit {
         this.IsDrawerOpen = false;
     }
 
-    updateGames() {
-        this._game.find().subscribe(
-            (loadedGames: any) => this.gameList = loadedGames,
-            error => console.log(error.message));
-    }
-
     join(game: Game) {
+        if (!this.hasContributorNameAssigned)
+        {
+            this.dialogs.alert(
+                "Missing contributor name.",
+                "Please update your contributor name in profile section to join/leave game!",
+                "Ok");
+            return;
+        }
         if (this.account.projects.length == 0) {
-            dialogs.alert({
-                title: "No project available.",
-                message: "You don't have assigned any project. Contact your suspervisor.",
-                okButtonText: "Ok"
-            });
+            this.dialogs.alert(
+                "No project available.",
+                "You don't have assigned any project. Contact your suspervisor.",
+                "Ok");
             return;
         }
         if (this.account.games.filter(element => element.Name == game.Name).length != 0) {
-            dialogs.alert({
-                title: "Already a player.",
-                message: "Check achievements for your progress.",
-                okButtonText: "Ok"
-            });
+            this.dialogs.alert(
+                "Already a player.",
+                "Check achievements for your progress.",
+                "Ok");
         }
         else {
-            dialogs.confirm({
-                title: "Join game",
-                message: "Do you wish to join this game?",
-                okButtonText: "Yes",
-                cancelButtonText: "Cancel"
-            }).then(result => {
+            this.dialogs.confirm(
+                "Join game",
+                "Do you wish to join this game?",
+                "Yes").then(result => {
                 if (result) {
                     console.log("Adding game \"" + game.CommonName + "\" from games.");
                     var notificationGameID = this.getHashCode(<String>game.id);
@@ -176,8 +186,7 @@ export class ListOfGamesComponent extends Observable implements OnInit {
                                 );
                         }, err => {
                             console.log(err.message);
-                        }
-                        );
+                        });
                 }
             })
         }
@@ -196,13 +205,19 @@ export class ListOfGamesComponent extends Observable implements OnInit {
     }
 
     leave(game: Game) {
+        if (!this.hasContributorNameAssigned)
+        {
+            this.dialogs.alert(
+                "Missing contributor name.",
+                "Please update your contributor name in profile section to join/leave game!",
+                "Ok");
+            return;
+        }
         if (this.account.games.filter(element => element.Name == game.Name).length != 0) {
-            dialogs.confirm({
-                title: "Remove game",
-                message: "Are you sure you want to quit the game? All your achievements will be lost!",
-                okButtonText: "Yes",
-                cancelButtonText: "Cancel"
-            }).then(result => {
+            this.dialogs.confirm(
+                "Remove game",
+                "Are you sure you want to quit the game? All your achievements will be lost!",
+                "Yes").then(result => {
                 if (result) {
                     this._achievement.findOne({
                         where: {
@@ -226,16 +241,13 @@ export class ListOfGamesComponent extends Observable implements OnInit {
             });
         }
         else {
-            dialogs.confirm({
-                title: "Not a player.",
-                message: "Click \"Join\" to start playing the game.",
-                okButtonText: "Join",
-                cancelButtonText: "Cancel"
-            }).then(
+            this.dialogs.confirm(
+                "Not a player.",
+                "Click \"Join\" to start playing the game.",
+                "Join").then(
                 result => {
                     if (result) { this.join(game) }
-                }
-                );
+                });
         }
     }
 

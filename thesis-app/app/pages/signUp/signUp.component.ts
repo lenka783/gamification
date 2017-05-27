@@ -1,8 +1,9 @@
 /**e
  * Created by Lenka on 27/01/2017.
  */
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ViewContainerRef } from "@angular/core";
 import { Router } from "@angular/router";
+import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 
 import { Page } from "ui/page";
 import { Label } from "ui/label";
@@ -10,7 +11,7 @@ import { Button } from "ui/button";
 import { DatePicker } from "ui/date-picker";
 import { TextField } from "ui/text-field";
 
-import dialogs = require("ui/dialogs");
+import { DatePickerModalViewComponent, Dialogs } from "../../shared/modalViews/index";
 
 import {
     Account,
@@ -30,12 +31,11 @@ import {
 export class SignUpComponent implements OnInit, OnDestroy {
 
     private account: Account = new Account();
-    private datePickerIsVisible: boolean;
+    private dialogs: Dialogs;
 
     @ViewChild("container") container: ElementRef;
     @ViewChild("firstName") firstName: ElementRef;
     @ViewChild("lastName") lastName: ElementRef;
-    @ViewChild("datePicker") datePicker: ElementRef;
     @ViewChild("dateLabel") dateLabel: ElementRef;
     @ViewChild("dateButton") dateButton: ElementRef;
     @ViewChild("email") email: ElementRef;
@@ -43,18 +43,15 @@ export class SignUpComponent implements OnInit, OnDestroy {
     @ViewChild("passwordValidation") passwordValidation: ElementRef;
     @ViewChild("submitButton") submitButton: ElementRef;
 
-    constructor(private _router: Router, private _page: Page, private _account: AccountApi) {
+    constructor(private _router: Router, private _page: Page, private _account: AccountApi,
+        private _modalService: ModalDialogService, private vcRef: ViewContainerRef) {
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
-
+        this.dialogs = new Dialogs(_modalService, vcRef);
     }
 
     ngOnInit() {
         this._page.actionBarHidden = false;
-        this.datePickerIsVisible = false;
-        let datePicker = <DatePicker>this.datePicker.nativeElement;
-        datePicker.minDate = new Date(1900, 0, 1);
-        datePicker.maxDate = new Date(2049, 11, 31);
     }
 
     ngOnDestroy() {
@@ -62,17 +59,20 @@ export class SignUpComponent implements OnInit, OnDestroy {
     }
 
     dateButtonTap() {
-        let datePicker = <DatePicker>this.datePicker.nativeElement;
         let dateLabel = <Label>this.dateLabel.nativeElement;
         let dateButton = <Button>this.dateButton.nativeElement;
+        let that = this;
+        let currentDate = new Date();
+        let options: ModalDialogOptions = {
+            viewContainerRef: this.vcRef,
+            context: currentDate.toDateString(),
+            fullscreen: false
+        };
 
-        datePicker.visibility = this.datePickerIsVisible ? "collapse" : "visible";
-        dateLabel.visibility = this.datePickerIsVisible ? "visible" : "collapse";
-        dateButton.text = dateButton.text = this.datePickerIsVisible ? "Choose date" : "Submit date";
-
-        console.log("Account's date of birth: " + this.account.dateOfBirth);
-
-        this.datePickerIsVisible = !this.datePickerIsVisible;
+        this._modalService.showModal(DatePickerModalViewComponent, options)
+            .then((dateresult: Date) => {
+                this.account.dateOfBirth = dateresult;
+            });
     }
 
     register() {
@@ -87,19 +87,15 @@ export class SignUpComponent implements OnInit, OnDestroy {
                             result => this._router.navigate(['profile']),
                             error => {
                                 console.log("Problem occured while connecting to server");
-                                dialogs.alert({
-                                    title: "Server connection failed",
-                                    message: "Could not connect to the server, try again later.",
-                                    okButtonText: "Ok"
-                                });
+                                this.dialogs.alert("Server connection failed", "Could not connect to the server, try again later.", "Ok");
                             });
                     },
                     error => this.registerErrorHandler());
             } else {
-                alert("Passwords must match!");
+                this.dialogs.alert("Error", "Passwords must match!", "Ok");
             }
         } else {
-            alert("There already is an account for given email.");
+            this.dialogs.alert("Error", "There already is an account for given email.", "Ok");
         }
 
 
@@ -107,19 +103,11 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
     private registerErrorHandler() {
         if (!this.isCompletelyFilled()) {
-            dialogs.alert({
-                title: "Form not filled",
-                message: "Please fill out the form completely!",
-                okButtonText: "Ok"
-            });
+            this.dialogs.alert("Form not filled", "Please fill out the form completely!", "Ok");
             return;
         }
         if (!hasValidEmail(this.account)) {
-            dialogs.alert({
-                title: "Invalid email",
-                message: "Write a proper email address.",
-                okButtonText: "Ok"
-            });
+            this.dialogs.alert("Invalid email", "Write a proper email address.", "Ok");
             return;
         }
 
@@ -131,22 +119,13 @@ export class SignUpComponent implements OnInit, OnDestroy {
             res => {
                 if (res.length != 0) {
                     console.log("Account for given email already exists!");
-                    dialogs.alert({
-                        title: "Email already exists!",
-                        message: "Account for given email already exists, choose another email.",
-                        okButtonText: "Ok"
-                    });
+                    this.dialogs.alert("Email already exists!", "Account for given email already exists, choose another email.", "Ok");
                 }
             },
             err => {
                 console.log("Problem occured while connecting to server");
-                    dialogs.alert({
-                        title: "Server connection failed",
-                        message: "Could not connect to the server, try again later.",
-                        okButtonText: "Ok"
-                    });
-            }
-        );
+                this.dialogs.alert("Server connection failed", "Could not connect to the server, try again later.", "Ok");
+            });
     }
 
     private passwordIsConfirmed(): Boolean {

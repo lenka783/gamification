@@ -1,0 +1,108 @@
+ActionBar {
+    background-color: #2691d9;
+    color: whitesmoke;
+}
+
+GridLayout, StackLayout, Page, ListView {
+    background-color: whitesmoke;
+}
+ListView {
+    separator-color: whitesmoke;
+}
+.borderLayoutMargin  {
+    margin-left: 15;
+    margin-right: 15;
+    margin-bottom: 5;
+}
+.border {
+    padding: 15;
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4d4d4d;
+}
+.listButton {
+    border-radius: 0;
+    margin: 0;
+    background-color: #d4e9f7;
+    color: black;
+}
+
+.dialogTitleLabel {
+    border-width: 3px;
+    border-style: solid;
+    border-color: whitesmoke;
+    border-bottom-color: #4d4d4d;
+    text-align: center;
+    font-size: 30;
+    height: 50;
+    color: black;
+}
+.dialogMessageLabel {
+    margin-top: 5;
+    text-align: center;
+    height: 150;
+    font-size: 18;
+    color: black;
+}
+Button {
+    background-color: #2691d9;
+    color: whitesmoke;
+    margin-left: 10;
+    margin-right: 10;
+    margin-bottom: 10;
+    border-radius: 8px;
+    padding: 15;
+}
+Button:highlighted {
+    animation-name: highlightButton;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes highlightButton {
+    0% { background-color: #7dbde8; }
+    100% { background-color: #2691d9; }
+}
+.darkColoredButton {
+    background-color: #175782;
+    color: whitesmoke;
+}
+.darkColoredButton:highlighted {
+    animation-name: highlightDark;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes highlightDark {
+    0% { background-color: #2691d9; }
+    100% { background-color: #175782; }
+}
+.lightColoredButton {
+    background-color: #67b2e4;
+    color: whitesmoke;
+}
+.lightColoredButton:highlighted {
+    animation-name: highlightLight;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes highlightLight {
+    0% { background-color: #bedef4; }
+    100% { background-color: #67b2e4; }
+}
+.cancelButton {
+    background-color: #b30000;
+    color: whitesmoke;
+}
+.cancelButton:highlighted {
+    animation-name: highlighCancel;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes highlighCancel {
+    0% { background-color: #ff8080; }
+    100% { background-color: #b30000; }
+}

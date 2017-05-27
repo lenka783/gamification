@@ -10,7 +10,6 @@ import { Account, Game, Repository } from "../../shared/sdk/models/index";
 import { GameApi, AccountApi, RepositoryApi } from "../../shared/sdk/services/index";
 
 import application = require("application");
-import dialogs = require("ui/dialogs");
 import LocalNotifications = require("nativescript-local-notifications");
 
 @Component({
@@ -29,6 +28,7 @@ export class ProfileComponent extends Observable implements OnInit {
     private IsIOsApp: boolean;
     private IsDrawerOpen: boolean;
     private sideDrawerNavigation: SideDrawerNavigation;
+    private pageLoaded = false;
 
     constructor(
         private _router: Router,
@@ -59,15 +59,17 @@ export class ProfileComponent extends Observable implements OnInit {
         this._page.actionBarHidden = false;
         this.IsIOsApp = Config.IOS_APP;
         this.IsDrawerOpen = false;
-        this.updateGames();
-        this.updateProjects();
+        this.updateAccountInfo();
         this.printAccount();
         this.checkNotificationsPermission();
     }
 
-    updateGames() {
+    updateAccountInfo() {
         this._account.getGames(this.account.id).subscribe(
-            games => this.account.games = <Array<Game>>games,
+            games => {
+                this.account.games = <Array<Game>>games;
+                this.updateProjects();
+            },
             error => console.log(error.message)
         );
     }
@@ -77,6 +79,7 @@ export class ProfileComponent extends Observable implements OnInit {
             projects => {
                 this.account.projects = <Array<Repository>>projects;
                 console.log(this.account.projects.length);
+                this.pageLoaded = true;
             },
             error => console.log(error.message)
         );
@@ -125,28 +128,6 @@ export class ProfileComponent extends Observable implements OnInit {
         this._account.logout();
         this._router.navigate([""]);
         console.log("Account logged out!");
-    }
-
-    getScheduledNotifications() {
-        LocalNotifications.getScheduledIds().then(
-            (ids) => alert({
-                title: "Scheduled ID's",
-                message: 'ID\'s: ' + ids,
-                okButtonText: "Sweet!"
-            }),
-            (error) => console.log("doGetScheduledIds error: " + error)
-        );
-    }
-
-    cancelAllNotifications() {
-        LocalNotifications.cancelAll().then(
-            () => dialogs.alert({
-                title: "Notifications",
-                message: "All notification has been canceled!",
-                okButtonText: "Thanks"
-            }),
-            error => console.log(error.message)
-        )
     }
 
     updateProfile() {

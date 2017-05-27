@@ -1,10 +1,7 @@
 import { Router } from "@angular/router";
 
 export class SideDrawerNavigation {
-    private router: Router;
-    
-    constructor(router: Router){
-        this.router = router;
+    constructor(private router: Router){
     }
 
     public profile(){

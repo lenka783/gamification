@@ -1,38 +1,31 @@
-<RadSideDrawer tkGamification tkToggleNavButton
-    (drawerOpening)="onDrawerOpening()" 
-    (drawerClosing)="onDrawerClosing()">
-    
+<RadSideDrawer tkGamification tkToggleNavButton (drawerOpening)="onDrawerOpening()" (drawerClosing)="onDrawerClosing()">
+
     <ActionBar title="List of available games">
-        <NavigationButton 
-            icon="res://menu" 
-            [visibility]="IsIOsApp ? 'collapsed' : 'visible'" 
-            (tap)="IsDrawerOpen ? closeDrawer() : openDrawer()"></NavigationButton>
-        <ActionItem 
-            icon="res://menu" 
-            ios.position="left" 
-            [visibility]="IsIOsApp ? 'visible' : 'collapsed'" 
-            (tap)="IsDrawerOpen ? closeDrawer() : openDrawer()"></ActionItem>
+        <NavigationButton icon="res://menu" [visibility]="IsIOsApp ? 'collapsed' : 'visible'" (tap)="IsDrawerOpen ? closeDrawer() : openDrawer()"></NavigationButton>
+        <ActionItem icon="res://menu" ios.position="left" [visibility]="IsIOsApp ? 'visible' : 'collapsed'" (tap)="IsDrawerOpen ? closeDrawer() : openDrawer()"></ActionItem>
     </ActionBar>
 
     <StackLayout tkDrawerContent class="sideStackLayout">
-        <GridLayout  class="sideStackLayout" rows="*, auto">
-            <StackLayout row="0">
+        <GridLayout class="sideStackLayout" rows="*, auto">
+            <StackLayout row="0" class="sideStackLayout">
                 <Button text="Profile" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.profile()"></Button>
                 <Button text="Projects" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.projects()"></Button>
                 <Button text="List of games" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.listOfGames()"></Button>
                 <Button text="Achievements" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.achievements()"></Button>
             </StackLayout>
-            <Button dock="bottom" text="Logout" class="sideButton sideFirstLevelButton" (tap)="logout()" row="1"></Button>
+            <Button dock="bottom" text="Logout" class="sideButton sideFirstLevelButton bottomButton" (tap)="logout()" row="1"></Button>
         </GridLayout>
     </StackLayout>
 
     <GridLayout tkMainContent rows="*">
-        <ListView row="0" [items]="gameList" class="medium-spacing">
+        <ListView row="0" [items]="gameList" class="medium-spacing" [class.visible]="listLoaded">
             <template let-item="item">
-                <GridLayout columns="auto, auto, auto" class="listViewLine">
-                    <Label [text]="item.CommonName" col="0" textWrap="true" width="50%" class="androidLabel"></Label>
-                    <Button text="Join" class="join" col="1" (tap)="join(item)" width="20%"></Button>
-                    <Button text="Leave" class="leave" col="2" (tap)="leave(item)" width="20%"></Button>
+                <GridLayout columns="auto, auto" class="listViewLine">
+                    <Label [text]="item.CommonName" col="0" textWrap="true" width="45%" class="androidLabel"></Label>
+                    <GridLayout columns="auto, auto" col="1" width="55%">
+                        <Button text="Join" col="0" (tap)="join(item)"></Button>
+                        <Button text="Leave" class="cancelButton" col="1" (tap)="leave(item)"></Button>
+                    </GridLayout>
                 </GridLayout>
             </template>
         </ListView>

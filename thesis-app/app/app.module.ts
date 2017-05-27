@@ -15,10 +15,22 @@ import { SDKModels, LoopBackAuth, JSONSearchParams } from "./shared/sdk/index";
 import { routes, navigatableComponents } from "./app.routing";
 import { AppComponent } from "./app.component";
 
+
+import { ModalDialogService } from "nativescript-angular/modal-dialog";
+import { DatePickerModalViewComponent, AlertModalViewComponent, ConfirmModalViewComponent } from "./shared/modalViews/index";
+
 @NgModule({
     declarations: [
         AppComponent,
+        DatePickerModalViewComponent,
+        AlertModalViewComponent,
+        ConfirmModalViewComponent,
         ...navigatableComponents
+    ],
+    entryComponents: [
+        DatePickerModalViewComponent,
+        AlertModalViewComponent,
+        ConfirmModalViewComponent
     ],
     bootstrap: [
         AppComponent
@@ -37,7 +49,8 @@ import { AppComponent } from "./app.component";
         SDKModels,
         LoopBackAuth,
         InternalStorage,
-        JSONSearchParams
+        JSONSearchParams,
+        ModalDialogService
     ],
     schemas: [
         NO_ERRORS_SCHEMA

@@ -12,7 +12,7 @@ import frameModule = require("ui/frame");
 })
 export class AppComponent {
     constructor(private _router: Router, private _account: AccountApi) {
-        frameModule.Frame.defaultTransition = { name: "slide" };
+        //frameModule.Frame.defaultTransition = { name: "slide" };
         if (!this._account.isAuthenticated()) {
             this._router.navigate(['MainComponent']);
         } else {

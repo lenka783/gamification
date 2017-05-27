@@ -4,3 +4,7 @@ ActionBar{
 Label {
     word-wrap: true;
 }
+Button {
+    margin-left: 3;
+    margin-right: 3;
+}

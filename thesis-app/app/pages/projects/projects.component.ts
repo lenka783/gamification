@@ -1,16 +1,18 @@
-import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable } from "data/observable";
 
 import { Page } from "ui/page";
-import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular"
+import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
+import { ModalDialogService } from "nativescript-angular/modal-dialog";
 
 import { LoopBackConfig, Config, SideDrawerNavigation } from "../../shared/index";
 import { Account, Game, Achievement, Repository, RepositoryContributor } from "../../shared/sdk/models/index";
 import { GameApi, AccountApi, AchievementApi, RepositoryApi, RepositoryContributorApi } from "../../shared/sdk/services/index";
 
+import { Dialogs } from "../../shared/modalViews/index";
+
 import application = require("application");
-import dialogs = require("ui/dialogs");
 
 import LocalNotifications = require("nativescript-local-notifications");
 
@@ -30,6 +32,8 @@ export class ProjectsComponent extends Observable implements OnInit {
     private IsIOsApp: boolean;
     private IsDrawerOpen: boolean;
     private sideDrawerNavigation: SideDrawerNavigation;
+    private listLoaded = false;
+    private dialogs: Dialogs;
 
     constructor(
         private _router: Router,
@@ -38,12 +42,15 @@ export class ProjectsComponent extends Observable implements OnInit {
         private _account: AccountApi,
         private _game: GameApi,
         private _achievement: AchievementApi,
-        private _contributors: RepositoryContributorApi) {
+        private _contributors: RepositoryContributorApi,
+        private _modalService: ModalDialogService,
+        private vcRef: ViewContainerRef) {
         super();
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
         this.sideDrawerNavigation = new SideDrawerNavigation(_router);
+        this.dialogs = new Dialogs(_modalService, vcRef)
     }
 
     loadAccount() {
@@ -76,7 +83,10 @@ export class ProjectsComponent extends Observable implements OnInit {
 
     updateProjects() {
         this._account.getProjects(this.account.id).subscribe(
-            projects => this.account.projects = <Array<Repository>>projects,
+            projects => {
+                this.account.projects = <Array<Repository>>projects;
+                this.listLoaded = true;
+            },
             error => console.log(error.message)
         );
     }
@@ -120,14 +130,10 @@ export class ProjectsComponent extends Observable implements OnInit {
         }).subscribe(
             result => {
                 var repositoryContributor = <RepositoryContributor>result.pop();
-                dialogs.alert({
-                    title: "Project " + repository.projectName,
-                    message: "Your local address is:\n" + repositoryContributor.localAddress,
-                okButtonText: "Thanks"
-                }).then(() => console.log("Dialog closed!")),
-                    error => console.log("ERROR: " + error.message)
-            }, error => {
-                console.log(error.message);
+                this.dialogs.alert(
+                    "Project " + repository.projectName, 
+                    "Your local address is:\n" + repositoryContributor.localAddress, 
+                    "Thanks");
             }
         )
     }

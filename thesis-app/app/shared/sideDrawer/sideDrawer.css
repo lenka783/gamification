@@ -3,7 +3,7 @@
     padding: 10;
 }
 .sideStackLayout {
-    background-color: #4d4d4d;
+    background-color: #2691d9;
 }
 .sideButton {
     font-size: 20;
@@ -13,7 +13,7 @@
     color: black;
 }
 .sideFirstLevelButton {
-    background-color: lightgray;
+    background-color: #bedef4;
     margin-bottom: 5;
     margin-top: 5;
     margin-left: 10;

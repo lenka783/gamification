@@ -10,15 +10,17 @@
                    autocapitalizationType = "none"
                    autocorrect="false"
                    hint="email"
+                   class="border"
                    [(ngModel)]="account.email"></TextField>
         <TextField #password
                    hint="password"
                    secure="true"
+                   class="border"
                    [(ngModel)]="account.password"></TextField>
         <Button
                 text="Login"
-                class="loginButton"
                 (tap)="login()">
         </Button>
     </StackLayout>
+    <ActivityIndicator [busy]="isLoading" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
 </GridLayout>

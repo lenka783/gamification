@@ -15,19 +15,19 @@
     </ActionBar>
 
     <StackLayout tkDrawerContent class="sideStackLayout">
-        <GridLayout  class="sideStackLayout" rows="*, auto">
-            <StackLayout row="0">
+        <GridLayout class="sideStackLayout" rows="*, auto">
+            <StackLayout row="0" class="sideStackLayout">
                 <Button text="Profile" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.profile()"></Button>
                 <Button text="Projects" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.projects()"></Button>
                 <Button text="List of games" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.listOfGames()"></Button>
                 <Button text="Achievements" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.achievements()"></Button>
             </StackLayout>
-            <Button dock="bottom" text="Logout" class="sideButton sideFirstLevelButton" (tap)="logout()" row="1"></Button>
+            <Button dock="bottom" text="Logout" class="sideButton sideFirstLevelButton bottomButton" (tap)="logout()" row="1"></Button>
         </GridLayout>
     </StackLayout>
 
     <GridLayout tkMainContent rows="*">
-        <ListView row="0" [items]="account.games" class="medium-spacing">
+        <ListView row="0" [items]="account.games" class="medium-spacing"  [class.visible]="listLoaded">
             <template let-item="item">
                 <GridLayout class="listViewLine">
                     <Button [text]="item.CommonName" class="listButton" (tap)="showAchievement(item)" textWrap="true"></Button>

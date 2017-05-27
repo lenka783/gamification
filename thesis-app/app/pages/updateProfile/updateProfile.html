@@ -15,30 +15,30 @@
     </ActionBar>
 
     <StackLayout tkDrawerContent class="sideStackLayout">
-        <GridLayout  class="sideStackLayout" rows="*, auto">
-            <StackLayout row="0">
+        <GridLayout class="sideStackLayout" rows="*, auto">
+            <StackLayout row="0" class="sideStackLayout">
                 <Button text="Profile" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.profile()"></Button>
                 <Button text="Projects" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.projects()"></Button>
                 <Button text="List of games" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.listOfGames()"></Button>
                 <Button text="Achievements" class="sideButton sideFirstLevelButton" (tap)="sideDrawerNavigation.achievements()"></Button>
             </StackLayout>
-            <Button dock="bottom" text="Logout" class="sideButton sideFirstLevelButton" (tap)="logout()" row="1"></Button>
+            <Button dock="bottom" text="Logout" class="sideButton sideFirstLevelButton bottomButton" (tap)="logout()" row="1"></Button>
         </GridLayout>
     </StackLayout>
 
     <GridLayout tkMainContent rows="*, auto">
-        <GridLayout class="profileInfo" row="0" rows="auto, auto, auto">
-            <GridLayout columns="auto, *" class="profileInfo" row="0">
+        <GridLayout row="0" class="profileInfo" rows="auto, auto, auto">
+            <GridLayout columns="auto, *" row="0">
                 <Label col="0" text="Name: "></Label>
-                <TextField col="1" class="update" [(ngModel)]="account.firstName"></TextField>
+                <TextField col="1" [(ngModel)]="account.firstName" class="border"></TextField>
             </GridLayout>
-            <GridLayout columns="auto, *" class="profileInfo" row="1">
+            <GridLayout columns="auto, *" row="1">
                 <Label col="0" text="Surname: "></Label>
-                <TextField col="1" class="update" [(ngModel)]="account.lastName"></TextField>
+                <TextField col="1" [(ngModel)]="account.lastName" class="border"></TextField>
             </GridLayout>
-            <GridLayout columns="auto, *" class="profileInfo" row="2">
+            <GridLayout columns="auto, *" row="2">
                 <Label col="0" text="Contributor name: "></Label>
-                <TextField col="1" class="update" [(ngModel)]="account.contributorName"></TextField>
+                <TextField col="1" [(ngModel)]="account.contributorName" class="border"></TextField>
             </GridLayout>
         </GridLayout>
         <Button text="Submit" class="submit" (tap)="updateProfile()" row="1"></Button>

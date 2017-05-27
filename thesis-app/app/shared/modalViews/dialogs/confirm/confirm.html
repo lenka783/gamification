@@ -1,0 +1,8 @@
+<GridLayout rows="auto, auto, auto">
+    <Label [text]="title" row="0" class="dialogTitleLabel"></Label>
+    <Label [text]="message" textWrap="true" row="1" class="dialogMessageLabel"></Label>
+    <GridLayout columns="*, *" row="2">
+        <Button [text]="okButtonText" (tap)="submit()" col="0"></Button>
+        <Button [text]="cancelButtonText" (tap)="cancel()" col="1" class="cancelButton"></Button>
+    </GridLayout>
+</GridLayout>

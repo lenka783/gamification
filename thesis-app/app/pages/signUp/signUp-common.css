@@ -1,18 +1,12 @@
-ActionBar {
-    background-color: #4d4d4d;
-    color: whitesmoke;
-}
 GridLayout {
     margin-top: 20;
     margin-bottom:10;
     margin-left: 10;
     margin-right: 10;
-    background-color: white;
 }
 StackLayout {
     margin-left: 30;
     margin-right: 30;
-    background-color: white;
 }
 Label {
     margin-top: 5;
@@ -21,19 +15,13 @@ Label {
     border-radius: 8px;
     padding: 15;
 }
-Button, TextField {
+TextField {
     margin-bottom:10;
     margin-left: 10;
     margin-right: 10;
-    border-radius: 8px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #4d4d4d;
     padding: 15;
 }
 .save {
-    background-color: #4d4d4d;
-    color: white;
     margin-top: 20;
 }
 .date-layout {
@@ -41,10 +29,6 @@ Button, TextField {
     margin-bottom: 5;
     margin-left: 0;
     margin-right: 0;
-}
-.buttons {
-    background-color: #4d4d4d;
-    color: white;
 }
 .date-label{
     text-align: left;

@@ -1,31 +1,15 @@
-ActionBar {
-    background-color: #4d4d4d;
-    color: whitesmoke;
-}
-GridLayout {
-    background-color: #f2f2f2;
-}
-Button{
-    background-color: #4d4d4d;
-    color: white;
-}
 .profileInfo{
     margin: 15;
 }
-.profileInfoLine {
-    margin-left: 15;
-    margin-right: 15;
-    margin-bottom: 5;
-    padding: 15;
-    border-radius: 8px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #4d4d4d;
+.mainContentGrid{
+  opacity: 0;
 }
-.updateButton {
-    background-color: #4d4d4d;
-    color: whitesmoke;
-    padding: 15;
-    margin: 10;
-    border-radius: 8px;
+.visible {
+  animation-name: show;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+@keyframes show {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

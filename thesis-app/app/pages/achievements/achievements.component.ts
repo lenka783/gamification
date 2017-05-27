@@ -1,16 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable } from "data/observable";
 
 import { Page } from "ui/page";
-import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular"
+import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
+import { ModalDialogService} from "nativescript-angular/modal-dialog";
 
 import { LoopBackConfig, Config, SideDrawerNavigation } from "../../shared/index";
 import { Account, Achievement, Game, Repository, RepositoryContributor } from "../../shared/sdk/models/index";
 import { AchievementApi, GameApi, AccountApi, RepositoryApi, RepositoryContributorApi } from "../../shared/sdk/services/index";
+import { Dialogs } from "../../shared/modalViews/index";
 
 import application = require("application");
-import dialogs = require("ui/dialogs");
 
 import LocalNotifications = require("nativescript-local-notifications");
 
@@ -30,6 +31,8 @@ export class AchievementsComponent extends Observable implements OnInit {
     private IsIOsApp: boolean;
     private IsDrawerOpen: boolean;
     private sideDrawerNavigation: SideDrawerNavigation;
+    private listLoaded = false;
+    private dialogs: Dialogs;
 
     constructor(
         private _router: Router,
@@ -37,12 +40,15 @@ export class AchievementsComponent extends Observable implements OnInit {
         private _changeDetectionRef: ChangeDetectorRef,
         private _account: AccountApi,
         private _game: GameApi,
-        private _achievement: AchievementApi) {
+        private _achievement: AchievementApi,
+        private _modalService: ModalDialogService,
+        private vcRef: ViewContainerRef) {
         super();
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
         this.sideDrawerNavigation = new SideDrawerNavigation(_router);
+        this.dialogs = new Dialogs(_modalService, vcRef);
     }
 
     ngAfterViewInit() {
@@ -60,7 +66,10 @@ export class AchievementsComponent extends Observable implements OnInit {
 
     updateGames() {
         this._account.getGames(this.account.id).subscribe(
-            games => this.account.games = <Array<Game>>games,
+            games => {
+                this.account.games = <Array<Game>>games;
+                this.listLoaded = true;
+            },
             error => console.log(error.message)
         );
     }
@@ -101,11 +110,10 @@ export class AchievementsComponent extends Observable implements OnInit {
                 "gameID": game.id
             }
         }).subscribe(
-            result => dialogs.alert({
-                title: "Congratulations!",
-                message: "You succesfully played the game for " + (<Achievement>result.pop()).daysInRow + " days in a row!",
-                okButtonText: "Thanks"
-            }).then( () => console.log("Dialog closed!")),
+            result => this.dialogs.alert(
+                "Congratulations!",
+                "You succesfully played the game for " + (<Achievement>result.pop()).daysInRow + " days in a row!",
+                "Thanks"),
             error => console.log("ERROR: " + error.message)
         )
     }

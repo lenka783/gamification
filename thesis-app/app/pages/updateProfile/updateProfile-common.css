@@ -1,32 +1,14 @@
-ActionBar {
-    background-color: #4d4d4d;
-    color: whitesmoke;
-}
-GridLayout {
-    background-color: #f2f2f2;
-}
 .profileInfo{
-    margin: 5;
+    margin: 10;
 }
 Label {
     margin-bottom: 5;
     border-radius: 8px;
     padding: 15;
 }
-TextField, Button {
+TextField {
     margin-bottom: 5;
-    padding: 15;
 }
 .submit {
-    background-color: #4d4d4d;
-    color: whitesmoke;
-    padding: 15;
-    margin: 10;
-    border-radius: 8px;
-}
-.update {
-    border-radius: 8px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #4d4d4d;
+    margin-bottom: 10;
 }
