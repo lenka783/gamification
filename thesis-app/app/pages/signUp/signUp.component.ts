@@ -52,6 +52,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this._page.actionBarHidden = false;
         this.datePickerIsVisible = false;
+        let datePicker = <DatePicker>this.datePicker.nativeElement;
+        datePicker.minDate = new Date(1900, 0, 1);
+        datePicker.maxDate = new Date(2049, 11, 31);
     }
 
     ngOnDestroy() {
