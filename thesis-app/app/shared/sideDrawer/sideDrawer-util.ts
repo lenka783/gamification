@@ -1,7 +1,7 @@
-import { Router } from "@angular/router";
+import { RouterExtensions } from "nativescript-angular/router";
 
 export class SideDrawerNavigation {
-    constructor(private router: Router){
+    constructor(private router: RouterExtensions){
     }
 
     public profile(){

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
 import { Observable } from "data/observable";
 
 import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
@@ -13,6 +13,8 @@ import { Account } from "../../shared/sdk/models";
 import { Dialogs } from "../../shared/modalViews/index";
 import { isIOS, isAndroid } from "platform";
 
+import utils = require("utils/utils");
+
 
 @Component({
     selector: "updateProfile",
@@ -21,7 +23,7 @@ import { isIOS, isAndroid } from "platform";
     styleUrls: ["pages/updateProfile/updateProfile-common.css", "pages/updateProfile/updateProfile.css", "shared/sideDrawer/sideDrawer.css"]
 })
 
-export class UpdateProfileComponent extends Observable implements OnInit {
+export class UpdateProfileComponent implements OnInit, OnDestroy {
 
     @ViewChild(RadSideDrawerComponent) public drawerComponent: RadSideDrawerComponent;
 
@@ -39,15 +41,13 @@ export class UpdateProfileComponent extends Observable implements OnInit {
     constructor(
         private _routerExtensions: RouterExtensions,
         private _page: Page,
-        private _changeDetectionRef: ChangeDetectorRef,
         private _account: AccountApi,
         private _modalService: ModalDialogService,
         private vcRef: ViewContainerRef) {
-        super();
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
-        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions.router);
+        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions);
         this.dialogs = new Dialogs(_modalService, vcRef);
     }
 
@@ -57,7 +57,6 @@ export class UpdateProfileComponent extends Observable implements OnInit {
 
     ngAfterViewInit() {
         this.drawer = this.drawerComponent.sideDrawer;
-        this._changeDetectionRef.detectChanges();
     }
 
     ngOnInit() {
@@ -66,6 +65,10 @@ export class UpdateProfileComponent extends Observable implements OnInit {
         this.firstName = this.account.firstName;
         this.lastName = this.account.lastName;
         this.contributorName = this.account.contributorName;
+    }
+
+    ngOnDestroy() {
+        utils.GC();
     }
 
     openDrawer() {
@@ -99,7 +102,7 @@ export class UpdateProfileComponent extends Observable implements OnInit {
             this.dialogs.alert("ERROR: Empty fields", "You can't update blank fields!", "Ok");
             return;
         }
-        this._account.patchAttributes(this.account.id, {
+        let sub = this._account.patchAttributes(this.account.id, {
             "firstName": this.firstName, 
             "lastName": this.lastName,
             "contributorName": this.contributorName
@@ -111,7 +114,8 @@ export class UpdateProfileComponent extends Observable implements OnInit {
                 console.log("Profile updated!");
                 this._routerExtensions.navigate(['profile']);
             },
-            error => console.log("ERROR: " + error.message)
+            error => console.log("ERROR: " + error.message),
+            () => sub.unsubscribe()
         );
         
     }

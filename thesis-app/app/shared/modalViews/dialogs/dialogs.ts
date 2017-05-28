@@ -1,6 +1,7 @@
 import { ViewContainerRef } from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { AlertModalViewComponent, ConfirmModalViewComponent } from "./index";
+import utils = require("utils/utils");
 
 export class Dialogs {
 

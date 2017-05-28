@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
-import { Observable } from "data/observable";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Injectable, ViewContainerRef } from "@angular/core";
 import { ObservableArray } from "data/observable-array";
 
 import { Page } from "ui/page";
@@ -14,6 +13,7 @@ import { Dialogs } from "../../shared/modalViews/index";
 
 import { isIOS, isAndroid } from "platform";
 import application = require("application");
+import utils = require("utils/utils");
 
 import LocalNotifications = require("nativescript-local-notifications");
 
@@ -25,11 +25,11 @@ import LocalNotifications = require("nativescript-local-notifications");
 })
 
 @Injectable()
-export class ListOfGamesComponent extends Observable implements OnInit {
+export class ListOfGamesComponent implements OnInit, OnDestroy {
 
     @ViewChild(RadSideDrawerComponent) drawerComponent: RadSideDrawerComponent;
     private drawer: SideDrawerType;
-    private gameList = new Array<Game>();
+    private gameList = new ObservableArray<Game>();
     private account: Account;
     private IsDrawerOpen: boolean;
     private sideDrawerNavigation: SideDrawerNavigation;
@@ -38,22 +38,21 @@ export class ListOfGamesComponent extends Observable implements OnInit {
     private dialogs: Dialogs;
     private isIOS = isIOS;
     private isAndroid = isAndroid;
+    private subscriptions = Array();
 
     constructor(
         private _routerExtensions: RouterExtensions,
         private _page: Page,
-        private _changeDetectionRef: ChangeDetectorRef,
         private _game: GameApi,
         private _account: AccountApi,
         private _achievement: AchievementApi,
         private _contributor: RepositoryContributorApi,
         private _modalService: ModalDialogService,
         private vcRef: ViewContainerRef) {
-        super();
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
-        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions.router);
+        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions);
         this.dialogs = new Dialogs(_modalService, vcRef);
     }
 
@@ -65,7 +64,6 @@ export class ListOfGamesComponent extends Observable implements OnInit {
     ngAfterViewInit() {
         console.log("Drawer component: " + this.drawerComponent);
         this.drawer = this.drawerComponent.sideDrawer;
-        this._changeDetectionRef.detectChanges();
     }
 
     ngOnInit() {
@@ -76,31 +74,36 @@ export class ListOfGamesComponent extends Observable implements OnInit {
         this.IsDrawerOpen = false;
     }
 
+    ngOnDestroy() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        utils.GC();
+    }
+
     hasContributorNameAssigned() {
         return this.account.contributorName != null || this.account.contributorName.length > 0;
     }
 
     updateGames() {
-        this._game.find().subscribe(
+        this.subscriptions.push(this._game.find().subscribe(
             (loadedGames: any) => {
-                this.gameList = loadedGames;
+                this.gameList = new ObservableArray<Game>(loadedGames);
                 this.listLoaded = true;
             },
-            error => console.log(error.message));
+            error => console.log(error.message)));
     }
 
     updateAccountGames() {
-        this._account.getGames(this.account.id).subscribe(
+        this.subscriptions.push(this._account.getGames(this.account.id).subscribe(
             games => this.account.games = <Array<Game>>games,
             error => console.log(error.message)
-        );
+        ));
     }
 
     updateAccountProjects() {
-        this._account.getProjects(this.account.id).subscribe(
+        this.subscriptions.push(this._account.getProjects(this.account.id).subscribe(
             projects => this.account.projects = <Array<Repository>>projects,
             error => console.log(error.message)
-        );
+        ));
     }
 
     openDrawer() {
@@ -122,8 +125,7 @@ export class ListOfGamesComponent extends Observable implements OnInit {
     }
 
     join(game: Game) {
-        if (!this.hasContributorNameAssigned)
-        {
+        if (!this.hasContributorNameAssigned) {
             this.dialogs.alert(
                 "Missing contributor name.",
                 "Please update your contributor name in profile section to join/leave game!",
@@ -148,48 +150,51 @@ export class ListOfGamesComponent extends Observable implements OnInit {
                 "Join game",
                 "Do you wish to join this game?",
                 "Yes").then(result => {
-                if (result) {
-                    console.log("Adding game \"" + game.CommonName + "\" from games.");
-                    var notificationGameID = this.getHashCode(<String>game.id);
-                    console.log("Notification game ID " + notificationGameID);
-                    console.log("Account id: " + this.account.id);
-                    console.log("Repository id: " + this.account.projects[0].id);
-                    this._contributor.findOne({
-                        where: {
-                            accountID: this.account.id,
-                            repositoryID: this.account.projects[0].id
-                        }
-                    }).subscribe(
-                        repositoryContributor => {
-                            console.log("Repository contributor:" + (<RepositoryContributor>repositoryContributor));
-                            this._achievement.create({
-                                "accountID": this.account.id,
-                                "gameID": game.id,
-                                "contributorName": this.account.contributorName,
-                                "gitSearchPattern": game.GitSearchPattern,
-                                "repositoryLocalAddress": (<RepositoryContributor>repositoryContributor).localAddress,
-                                "lastUpdated": new Date(2017, 1, 1, 0, 0, 0, 0)
-                            }).subscribe(
-                                result => {
-                                    var now = new Date();
-                                    console.log("Game added.");
-                                    LocalNotifications.schedule([{
-                                        id: notificationGameID,
-                                        title: "Notification",
-                                        body: "Check your " + game.CommonName + " progress in achievements!",
-                                        interval: 'day',
-                                        at: new Date(new Date().setHours(13, 15, 0))
-                                    }]);
+                    if (result) {
+                        console.log("Adding game \"" + game.CommonName + "\" from games.");
+                        var notificationGameID = this.getHashCode(<String>game.id);
+                        console.log("Notification game ID " + notificationGameID);
+                        console.log("Account id: " + this.account.id);
+                        console.log("Repository id: " + this.account.projects[0].id);
+                        let subscription = this._contributor.findOne({
+                            where: {
+                                accountID: this.account.id,
+                                repositoryID: this.account.projects[0].id
+                            }
+                        }).subscribe(
+                            repositoryContributor => {
+                                console.log("Repository contributor:" + (<RepositoryContributor>repositoryContributor));
+                                let sub = this._achievement.create({
+                                    "accountID": this.account.id,
+                                    "gameID": game.id,
+                                    "contributorName": this.account.contributorName,
+                                    "gitSearchPattern": game.GitSearchPattern,
+                                    "repositoryLocalAddress": (<RepositoryContributor>repositoryContributor).localAddress,
+                                    "lastUpdated": new Date(2017, 1, 1, 0, 0, 0, 0)
+                                }).subscribe(
+                                    result => {
+                                        var now = new Date();
+                                        console.log("Game added.");
+                                        LocalNotifications.schedule([{
+                                            id: notificationGameID,
+                                            title: "Notification",
+                                            body: "Check your " + game.CommonName + " progress in achievements!",
+                                            interval: 'day',
+                                            at: new Date(new Date().setHours(13, 15, 0))
+                                        }]);
 
-                                    this.updateAccountGames();
-                                },
-                                error => console.log(error.message)
-                                );
-                        }, err => {
-                            console.log(err.message);
-                        });
-                }
-            })
+                                        this.updateAccountGames();
+                                    },
+                                    error => console.log(error.message),
+                                    () => sub.unsubscribe()
+                                    );
+                            },
+                            err => {
+                                console.log(err.message);
+                            },
+                            () => subscription.unsubscribe());
+                    }
+                })
         }
         console.log("Current number of games: " + this.account.games.length);
     }
@@ -206,8 +211,7 @@ export class ListOfGamesComponent extends Observable implements OnInit {
     }
 
     leave(game: Game) {
-        if (!this.hasContributorNameAssigned)
-        {
+        if (!this.hasContributorNameAssigned) {
             this.dialogs.alert(
                 "Missing contributor name.",
                 "Please update your contributor name in profile section to join/leave game!",
@@ -219,27 +223,28 @@ export class ListOfGamesComponent extends Observable implements OnInit {
                 "Remove game",
                 "Are you sure you want to quit the game? All your achievements will be lost!",
                 "Yes").then(result => {
-                if (result) {
-                    this._achievement.findOne({
-                        where: {
-                            "accountID": this.account.id,
-                            "gameID": game.id
-                        }
-                    }).subscribe(((achievement: Achievement) => {
-                        console.log("Removing game \"" + game.CommonName + "\" from games.");
-                        this._achievement.deleteById(achievement.id).subscribe(
-                            result => {
-                                var notificationGameID = this.getHashCode(<String>game.id);
-                                console.log("Notification game ID " + notificationGameID);
-                                LocalNotifications.cancel(notificationGameID);
-                                this.updateAccountGames();
-                                console.log("Game was removed from active games!");
-                            },
-                            error => console.log("ERROR: " + error.message));
-
-                    }));
-                }
-            });
+                    if (result) {
+                        let subscription = this._achievement.findOne({
+                            where: {
+                                "accountID": this.account.id,
+                                "gameID": game.id
+                            }
+                        }).subscribe(((achievement: Achievement) => {
+                            console.log("Removing game \"" + game.CommonName + "\" from games.");
+                            let sub = this._achievement.deleteById(achievement.id).subscribe(
+                                result => {
+                                    var notificationGameID = this.getHashCode(<String>game.id);
+                                    console.log("Notification game ID " + notificationGameID);
+                                    LocalNotifications.cancel(notificationGameID);
+                                    this.updateAccountGames();
+                                    console.log("Game was removed from active games!");
+                                },
+                                error => console.log("ERROR: " + error.message),
+                                () => sub.unsubscribe());
+                        }),
+                        () => subscription.unsubscribe());
+                    }
+                });
         }
         else {
             this.dialogs.confirm(

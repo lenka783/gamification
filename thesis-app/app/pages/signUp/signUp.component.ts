@@ -2,8 +2,8 @@
  * Created by Lenka on 27/01/2017.
  */
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ViewContainerRef } from "@angular/core";
-import { Router } from "@angular/router";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
+import { RouterExtensions } from "nativescript-angular/router";
 
 import { Page } from "ui/page";
 import { Label } from "ui/label";
@@ -20,6 +20,7 @@ import { LoopBackConfig, Config, hasValidEmail } from "../../shared";
 import { isAndroid } from "platform";
 import { AndroidApplication, AndroidActivityBackPressedEventData } from "application";
 import application = require("application");
+import utils = require("utils/utils");
 
 @Component({
     selector: "signUp",
@@ -28,7 +29,7 @@ import application = require("application");
     styleUrls: ["pages/signUp/signUp-common.css", "pages/signUp/signUp.css"]
 })
 
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements OnInit, OnDestroy {
 
     private account: Account = new Account();
     private isLoading: Boolean;
@@ -42,7 +43,7 @@ export class SignUpComponent implements OnInit {
     @ViewChild("passwordValidation") passwordValidation: ElementRef;
     @ViewChild("submitButton") submitButton: ElementRef;
 
-    constructor(private _router: Router, private _page: Page, private _account: AccountApi,
+    constructor(private _routerExtensions: RouterExtensions, private _page: Page, private _account: AccountApi,
         private _modalService: ModalDialogService, private vcRef: ViewContainerRef) {
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
@@ -60,10 +61,14 @@ export class SignUpComponent implements OnInit {
                     if (this._account.isAuthenticated()) {
                         data.cancel = true;
                         this._account.logout();
-                        this._router.navigate([""]);
+                        this._routerExtensions.navigate([""]);
                     }
                 });
         }
+    }
+
+    ngOnDestroy() {
+        utils.GC();
     }
 
     dateButtonTap() {
@@ -94,7 +99,7 @@ export class SignUpComponent implements OnInit {
                 this._account.create(this.account).subscribe(
                     result => {
                         this._account.login(this.account).subscribe(
-                            result => this._router.navigate(['profile']),
+                            result => this._routerExtensions.navigate(['profile']),
                             error => {
                                 console.log("Problem occured while connecting to server");
                                 this.dialogs.alert("Server connection failed", "Could not connect to the server, try again later.", "Ok");

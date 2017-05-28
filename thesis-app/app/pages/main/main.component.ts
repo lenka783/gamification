@@ -4,7 +4,7 @@
 import { Component, OnInit } from "@angular/core";
 
 import { Page } from "ui/page";
-import { Router } from "@angular/router";
+import { RouterExtensions } from "nativescript-angular/router";
 
 @Component ({
     selector: "main",
@@ -14,7 +14,7 @@ import { Router } from "@angular/router";
 
 export class MainComponent implements OnInit{
 
-    constructor(private _router: Router, private _page: Page){
+    constructor(private _routerExtensions: RouterExtensions, private _page: Page){
     }
 
     ngOnInit() {
@@ -22,11 +22,11 @@ export class MainComponent implements OnInit{
     }
 
     signUp() {
-        this._router.navigate(['signUp']);
+        this._routerExtensions.navigate(['signUp']);
     }
 
     login() {
-        this._router.navigate(['login']);
+        this._routerExtensions.navigate(['login']);
     }
 
 }

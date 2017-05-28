@@ -3,6 +3,8 @@ import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 import { DatePicker } from "ui/date-picker";
 import { Page } from "ui/page";
 
+import utils = require("utils/utils");
+
 @Component({
     moduleId: module.id,
     templateUrl: "./datePicker.html",
@@ -15,6 +17,7 @@ export class DatePickerModalViewComponent implements OnInit {
     }
 
     ngOnInit() {
+        utils.GC();
         let datePicker: DatePicker = <DatePicker>this.page.getViewById<DatePicker>("datePicker");
         datePicker.year = this.currentdate.getFullYear();
         datePicker.month = this.currentdate.getMonth() + 1;

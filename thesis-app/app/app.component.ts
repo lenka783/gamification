@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-
-import { Router } from "@angular/router";
+import { RouterExtensions } from "nativescript-angular/router"; 
 
 import { LoopBackConfig, AccountApi } from "./shared/sdk";
 import frameModule = require("ui/frame");
@@ -11,12 +10,11 @@ import frameModule = require("ui/frame");
     providers: [ AccountApi ],
 })
 export class AppComponent {
-    constructor(private _router: Router, private _account: AccountApi) {
-        //frameModule.Frame.defaultTransition = { name: "slide" };
+    constructor(private _routerExtensions: RouterExtensions, private _account: AccountApi) {
         if (!this._account.isAuthenticated()) {
-            this._router.navigate(['MainComponent']);
+            this._routerExtensions.navigate(['MainComponent']);
         } else {
-            this._router.navigate(["profile"])
+            this._routerExtensions.navigate(["profile"])
         }
     }
 }

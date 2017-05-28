@@ -76,55 +76,15 @@ Button {
     margin-bottom: 10;
     padding: 15;
 }
-Button:highlighted {
-    animation-name: highlightButton;
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes highlightButton {
-    0% { background-color: #bedef4; }
-    100% { background-color: #2691d9; }
-}
 .darkColoredButton {
     background-color: #175782;
     color: whitesmoke;
-}
-.darkColoredButton:highlighted {
-    animation-name: highlightDark;
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes highlightDark {
-    0% { background-color: #bedef4; }
-    100% { background-color: #175782; }
 }
 .lightColoredButton {
     background-color: #67b2e4;
     color: whitesmoke;
 }
-.lightColoredButton:highlighted {
-    animation-name: highlightLight;
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes highlightLight {
-    0% { background-color: #bedef4; }
-    100% { background-color: #67b2e4; }
-}
 .cancelButton {
     background-color: #b30000;
     color: whitesmoke;
-}
-.cancelButton:highlighted {
-    animation-name: highlighCancel;
-    animation-duration: 1.5s;
-    animation-fill-mode: forwards;
-}
-
-@keyframes highlighCancel {
-    0% { background-color: #ffcccc; }
-    100% { background-color: #b30000; }
 }

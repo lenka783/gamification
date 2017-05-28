@@ -1,8 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { ViewContainerRef } from "@angular/core";
-import { Router } from "@angular/router";
 
 import { ModalDialogService } from "nativescript-angular/modal-dialog";
+import { RouterExtensions } from "nativescript-angular/router";
 
 import { Page } from "ui/page";
 import { TextField } from "ui/text-field";
@@ -37,14 +37,14 @@ export class LoginComponent implements OnInit {
 
     constructor(
         private _account: AccountApi,
-        private _router: Router,
+        private _routerExtensions: RouterExtensions,
         private _page: Page,
         private _modalService: ModalDialogService,
         private vcRef: ViewContainerRef) {
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         if (this._account.isAuthenticated())
-            this._router.navigate(['profile']);
+            this._routerExtensions.navigate(['profile']);
         this.account.email = "admin@thesis.cz";
         this.account.password = "admin";
         this.dialogs = new Dialogs(_modalService, vcRef)
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
                     if (this._account.isAuthenticated()) {
                         data.cancel = true;
                         this._account.logout();
-                        this._router.navigate([""]);
+                        this._routerExtensions.navigate([""]);
                     }
                 });
         }
@@ -73,8 +73,7 @@ export class LoginComponent implements OnInit {
         this._account.login(this.account)
             .subscribe(
             (res: AccessToken) => {
-                console.log("loginOK");
-                this._router.navigate(['profile']);
+                this._routerExtensions.navigate(['profile']);
                 this.isLoading = false;
             },
             err => {
@@ -84,7 +83,7 @@ export class LoginComponent implements OnInit {
     }
 
     errorHandler() {
-        this._account.find({
+        let sub = this._account.find({
             where: {
                 email: this.account.email
             }
@@ -104,16 +103,15 @@ export class LoginComponent implements OnInit {
                         "Please try again with the correct password!",
                         "Ok");
                     this.isLoading = false;
-                }
-            },
+                }},
             err => {
                 console.log("Problem occured while connecting to server: " + err.message);
                 this.dialogs.alert(
                     "Server connection failed",
                     "Could not connect to the server, try again later.",
                     "Ok");
-                this.isLoading = false;
-            }
-            );
+                this.isLoading = false;},
+            () => sub.unsubscribe()
+        );
     }
 }

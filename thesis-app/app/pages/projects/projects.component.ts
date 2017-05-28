@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
-import { Observable } from "data/observable";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Injectable, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
 
 import { Page } from "ui/page";
 import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
@@ -14,6 +13,7 @@ import { Dialogs } from "../../shared/modalViews/index";
 
 import { isIOS, isAndroid } from "platform";
 import application = require("application");
+import utils = require("utils/utils");
 
 import LocalNotifications = require("nativescript-local-notifications");
 
@@ -25,7 +25,7 @@ import LocalNotifications = require("nativescript-local-notifications");
 })
 
 @Injectable()
-export class ProjectsComponent extends Observable implements OnInit {
+export class ProjectsComponent implements OnInit, OnDestroy {
 
     @ViewChild(RadSideDrawerComponent) drawerComponent: RadSideDrawerComponent;
     private drawer: SideDrawerType;
@@ -36,66 +36,53 @@ export class ProjectsComponent extends Observable implements OnInit {
     private dialogs: Dialogs;
     private isIOS = isIOS;
     private isAndroid = isAndroid;
+    private subscriptions = new Array();
 
     constructor(
         private _routerExtensions: RouterExtensions,
         private _page: Page,
-        private _changeDetectionRef: ChangeDetectorRef,
         private _account: AccountApi,
         private _game: GameApi,
         private _achievement: AchievementApi,
         private _contributors: RepositoryContributorApi,
         private _modalService: ModalDialogService,
         private vcRef: ViewContainerRef) {
-        super();
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
-        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions.router);
+        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions);
         this.dialogs = new Dialogs(_modalService, vcRef)
     }
 
     loadAccount() {
         this.account = this._account.getCachedCurrent();
-        this.account.games = new Array<Game>();
         this.account.projects = new Array<Repository>();
     }
 
     ngAfterViewInit() {
-        this.printAccount();
         console.log("Drawer component: " + this.drawerComponent);
         this.drawer = this.drawerComponent.sideDrawer;
-        this._changeDetectionRef.detectChanges();
     }
 
     ngOnInit() {
         this._page.actionBarHidden = false;
         this.IsDrawerOpen = false;
-        this.updateGames();
         this.updateProjects();
     }
 
-    updateGames() {
-        this._account.getGames(this.account.id).subscribe(
-            games => this.account.games = <Array<Game>>games,
-            error => console.log(error.message)
-        );
+    ngOnDestroy() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        utils.GC();
     }
 
     updateProjects() {
-        this._account.getProjects(this.account.id).subscribe(
+        this.subscriptions.push(this._account.getProjects(this.account.id).subscribe(
             projects => {
                 this.account.projects = <Array<Repository>>projects;
                 this.listLoaded = true;
             },
             error => console.log(error.message)
-        );
-    }
-
-    printAccount() {
-        console.log("Curently logged account: ");
-        console.log("   ID: " + this.account.id);
-        console.log("   Name: " + this.account.firstName + " " + this.account.lastName);
+        ));
     }
 
     openDrawer() {
@@ -123,7 +110,7 @@ export class ProjectsComponent extends Observable implements OnInit {
     }
 
     showProjectInfo(repository: Repository) {
-        this._contributors.find({
+        let sub = this._contributors.find({
             where: {
                 accountID: this.account.id,
                 repositoryID: repository.id
@@ -135,7 +122,9 @@ export class ProjectsComponent extends Observable implements OnInit {
                     "Project " + repository.projectName,
                     "Your local address is:\n" + repositoryContributor.localAddress,
                     "Thanks");
-            }
-            )
+            },
+            err => console.log(JSON.stringify(err)),
+            () => sub.unsubscribe()
+        )
     }
 }

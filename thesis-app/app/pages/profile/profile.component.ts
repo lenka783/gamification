@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef } from "@angular/core";
-import { Observable } from "data/observable";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Injectable } from "@angular/core";
 
 import { Page } from "ui/page";
 import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
@@ -12,6 +11,7 @@ import { GameApi, AccountApi, RepositoryApi } from "../../shared/sdk/services/in
 import { isIOS, isAndroid } from "platform";
 
 import application = require("application");
+import utils = require("utils/utils");
 import LocalNotifications = require("nativescript-local-notifications");
 
 @Component({
@@ -22,7 +22,7 @@ import LocalNotifications = require("nativescript-local-notifications");
 })
 
 @Injectable()
-export class ProfileComponent extends Observable implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
     @ViewChild(RadSideDrawerComponent) drawerComponent: RadSideDrawerComponent;
     private drawer: SideDrawerType;
@@ -36,14 +36,12 @@ export class ProfileComponent extends Observable implements OnInit {
     constructor(
         private _routerExtensions: RouterExtensions,
         private _page: Page,
-        private _changeDetectionRef: ChangeDetectorRef,
         private _account: AccountApi,
         private _game: GameApi) {
-        super();
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
-        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions.router);
+        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions);
     }
 
     loadAccount() {
@@ -55,7 +53,6 @@ export class ProfileComponent extends Observable implements OnInit {
     ngAfterViewInit() {
         console.log("Drawer component: " + this.drawerComponent);
         this.drawer = this.drawerComponent.sideDrawer;
-        this._changeDetectionRef.detectChanges();
     }
 
     ngOnInit() {
@@ -66,24 +63,30 @@ export class ProfileComponent extends Observable implements OnInit {
         this.checkNotificationsPermission();
     }
 
+    ngOnDestroy() {
+        utils.GC();
+    }
+
     updateAccountInfo() {
-        this._account.getGames(this.account.id).subscribe(
+        let subscription = this._account.getGames(this.account.id).subscribe(
             games => {
                 this.account.games = <Array<Game>>games;
                 this.updateProjects();
             },
-            error => console.log(error.message)
+            error => console.log(error.message),
+            () => subscription.unsubscribe()
         );
     }
 
     updateProjects() {
-        this._account.getProjects(this.account.id).subscribe(
+        let sub = this._account.getProjects(this.account.id).subscribe(
             projects => {
                 this.account.projects = <Array<Repository>>projects;
                 console.log(this.account.projects.length);
                 this.pageLoaded = true;
             },
-            error => console.log(error.message)
+            error => console.log(error.message),
+            () => sub.unsubscribe()
         );
     }
 
