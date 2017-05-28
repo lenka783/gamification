@@ -51,7 +51,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        console.log("Drawer component: " + this.drawerComponent);
         this.drawer = this.drawerComponent.sideDrawer;
     }
 
@@ -59,7 +58,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this._page.actionBarHidden = false;
         this.IsDrawerOpen = false;
         this.updateAccountInfo();
-        this.printAccount();
         this.checkNotificationsPermission();
     }
 
@@ -90,13 +88,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         );
     }
 
-    printAccount() {
-        console.log("Curently logged account: ");
-        console.log("   ID: " + this.account.id);
-        console.log("   Name: " + this.account.firstName + " " + this.account.lastName);
-        console.log("   Contributor name: " + this.account.contributorName);
-    }
-
     checkNotificationsPermission() {
         LocalNotifications.hasPermission().then(granted => {
             if (!granted) {
@@ -120,12 +111,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     onDrawerOpening() {
-        console.log("Drawer opening");
         this.IsDrawerOpen = true;
     }
 
     onDrawerClosing() {
-        console.log("Drawer closing");
         this.IsDrawerOpen = false;
     }
 

@@ -101,7 +101,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
                         this._account.login(this.account).subscribe(
                             result => this._routerExtensions.navigate(['profile']),
                             error => {
-                                console.log("Problem occured while connecting to server");
+                                console.log(error);
                                 this.dialogs.alert("Server connection failed", "Could not connect to the server, try again later.", "Ok");
                                 this.isLoading = false;
                             });
@@ -137,12 +137,11 @@ export class SignUpComponent implements OnInit, OnDestroy {
         }).subscribe(
             res => {
                 if (res.length != 0) {
-                    console.log("Account for given email already exists!");
                     this.dialogs.alert("Email already exists!", "Account for given email already exists, choose another email.", "Ok");
                 }
             },
             err => {
-                console.log("Problem occured while connecting to server");
+                console.log(err);
                 this.dialogs.alert("Server connection failed", "Could not connect to the server, try again later.", "Ok");
             });
     }

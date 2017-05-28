@@ -2,24 +2,24 @@
 
 declare var Object: any;
 export interface UserInterface {
-  realm?: string;
-  username?: string;
-  password: string;
-  email: string;
-  emailVerified?: boolean;
-  verificationToken?: string;
-  id?: number;
+  "realm"?: string;
+  "username"?: string;
+  "password": string;
+  "email": string;
+  "emailVerified"?: boolean;
+  "verificationToken"?: string;
+  "id"?: number;
   accessTokens?: any[];
 }
 
 export class User implements UserInterface {
-  realm: string;
-  username: string;
-  password: string;
-  email: string;
-  emailVerified: boolean;
-  verificationToken: string;
-  id: number;
+  "realm": string;
+  "username": string;
+  "password": string;
+  "email": string;
+  "emailVerified": boolean;
+  "verificationToken": string;
+  "id": number;
   accessTokens: any[];
   constructor(data?: UserInterface) {
     Object.assign(this, data);
@@ -39,7 +39,7 @@ export class User implements UserInterface {
   **/
   public static factory(data: UserInterface): User{
     return new User(data);
-  }  
+  }
   /**
   * @method getModelDefinition
   * @author Julien Ledun
@@ -52,31 +52,31 @@ export class User implements UserInterface {
       name: 'User',
       plural: 'Users',
       properties: {
-        realm: {
+        "realm": {
           name: 'realm',
           type: 'string'
         },
-        username: {
+        "username": {
           name: 'username',
           type: 'string'
         },
-        password: {
+        "password": {
           name: 'password',
           type: 'string'
         },
-        email: {
+        "email": {
           name: 'email',
           type: 'string'
         },
-        emailVerified: {
+        "emailVerified": {
           name: 'emailVerified',
           type: 'boolean'
         },
-        verificationToken: {
+        "verificationToken": {
           name: 'verificationToken',
           type: 'string'
         },
-        id: {
+        "id": {
           name: 'id',
           type: 'number'
         },

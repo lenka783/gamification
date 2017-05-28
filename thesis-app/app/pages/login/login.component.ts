@@ -69,7 +69,6 @@ export class LoginComponent implements OnInit {
 
     login() {
         this.isLoading = true;
-        console.log("Accounts creditentials: email= " + this.account.email + ", password= " + this.account.password);
         this._account.login(this.account)
             .subscribe(
             (res: AccessToken) => {
@@ -90,14 +89,12 @@ export class LoginComponent implements OnInit {
         }).subscribe(
             res => {
                 if (res.length == 0) {
-                    console.log("No account found for given email!");
                     this.dialogs.alert(
                         "Wrong email!",
                         "No account found for given email, register first!",
                         "Ok");
                     this.isLoading = false;
                 } else {
-                    console.log("Wrong password");
                     this.dialogs.alert(
                         "Wrong password!",
                         "Please try again with the correct password!",
@@ -105,7 +102,6 @@ export class LoginComponent implements OnInit {
                     this.isLoading = false;
                 }},
             err => {
-                console.log("Problem occured while connecting to server: " + err.message);
                 this.dialogs.alert(
                     "Server connection failed",
                     "Could not connect to the server, try again later.",

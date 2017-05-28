@@ -5,16 +5,16 @@ import {
 
 declare var Object: any;
 export interface RepositoryInterface {
-  projectName: string;
-  gitAddress: string;
-  id?: any;
+  "projectName": string;
+  "gitAddress": string;
+  "id"?: any;
   contributors?: Account[];
 }
 
 export class Repository implements RepositoryInterface {
-  projectName: string;
-  gitAddress: string;
-  id: any;
+  "projectName": string;
+  "gitAddress": string;
+  "id": any;
   contributors: Account[];
   constructor(data?: RepositoryInterface) {
     Object.assign(this, data);
@@ -34,7 +34,7 @@ export class Repository implements RepositoryInterface {
   **/
   public static factory(data: RepositoryInterface): Repository{
     return new Repository(data);
-  }  
+  }
   /**
   * @method getModelDefinition
   * @author Julien Ledun
@@ -47,15 +47,15 @@ export class Repository implements RepositoryInterface {
       name: 'Repository',
       plural: 'Repositories',
       properties: {
-        projectName: {
+        "projectName": {
           name: 'projectName',
           type: 'string'
         },
-        gitAddress: {
+        "gitAddress": {
           name: 'gitAddress',
           type: 'string'
         },
-        id: {
+        "id": {
           name: 'id',
           type: 'any'
         },

@@ -17,8 +17,7 @@ export class Dialogs {
                 okButtonText: okButtonText
             },
             fullscreen: false
-        }).then(
-            (result) => console.log("Alert model view was shown." + result));
+        });
     }
 
     public alertWithCallback(title: String, message: String, okButtonText: String, callback) {

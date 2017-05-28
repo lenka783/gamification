@@ -80,12 +80,10 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
     }
 
     public onDrawerOpening() {
-        console.log("Drawer opening");
         this.IsDrawerOpen = true;
     }
 
     public onDrawerClosing() {
-        console.log("Drawer closing");
         this.IsDrawerOpen = false;
     }
 
@@ -111,7 +109,6 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
                 this.account.firstName = this.firstName;
                 this.account.lastName = this.lastName;
                 this.account.contributorName = this.contributorName;
-                console.log("Profile updated!");
                 this._routerExtensions.navigate(['profile']);
             },
             error => console.log("ERROR: " + error.message),

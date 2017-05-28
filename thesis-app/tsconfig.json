@@ -8,7 +8,19 @@
         "noEmitOnError": true,
         "types": [
             "socket.io-client"
-        ]
+        ],
+        "lib": [
+            "es6",
+            "dom",
+            "es2015.iterable"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "./node_modules/tns-core-modules/*",
+                "./node_modules/*"
+            ]
+        }
     },
     "exclude": [
         "node_modules",

@@ -28,11 +28,11 @@
 
     <GridLayout tkMainContent class="mainContentGrid layoutMargin" rows="*">
         <ListView row="0" [items]="account.projects"  [class.visible]="listLoaded">
-            <template let-item="item">
+            <ng-template let-item="item">
                 <GridLayout >
                     <Button [text]="item.projectName" class="listButton" (tap)="showProjectInfo(item)" textWrap="true"></Button>
                 </GridLayout>
-            </template>
+            </ng-template>
         </ListView>
     </GridLayout>
 

@@ -19,7 +19,7 @@
 
     <GridLayout tkMainContent rows="*">
         <ListView row="0" [items]="gameList" [class.visible]="listLoaded">
-            <template let-item="item">
+            <ng-template let-item="item">
                 <GridLayout columns="auto, auto" class="listViewLine">
                     <Label [text]="item.CommonName" col="0" textWrap="true" width="45%"></Label>
                     <GridLayout columns="auto, auto" col="1" width="55%">
@@ -27,7 +27,7 @@
                         <Button text="Leave" class="cancelButton" col="1" (tap)="leave(item)"></Button>
                     </GridLayout>
                 </GridLayout>
-            </template>
+            </ng-template>
         </ListView>
     </GridLayout>
 

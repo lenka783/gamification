@@ -53,7 +53,6 @@ export class AchievementsComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        console.log("Drawer component: " + this.drawerComponent);
         this.drawer = this.drawerComponent.sideDrawer;
     }
 
@@ -92,12 +91,10 @@ export class AchievementsComponent implements OnInit, OnDestroy {
     }
 
     onDrawerOpening() {
-        console.log("Drawer opening");
         this.IsDrawerOpen = true;
     }
 
     onDrawerClosing() {
-        console.log("Drawer closing");
         this.IsDrawerOpen = false;
     }
 

@@ -62,7 +62,6 @@ export class ListOfGamesComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        console.log("Drawer component: " + this.drawerComponent);
         this.drawer = this.drawerComponent.sideDrawer;
     }
 
@@ -115,12 +114,10 @@ export class ListOfGamesComponent implements OnInit, OnDestroy {
     }
 
     public onDrawerOpening() {
-        console.log("Drawer opening");
         this.IsDrawerOpen = true;
     }
 
     public onDrawerClosing() {
-        console.log("Drawer closing");
         this.IsDrawerOpen = false;
     }
 
@@ -153,9 +150,6 @@ export class ListOfGamesComponent implements OnInit, OnDestroy {
                     if (result) {
                         console.log("Adding game \"" + game.CommonName + "\" from games.");
                         var notificationGameID = this.getHashCode(<String>game.id);
-                        console.log("Notification game ID " + notificationGameID);
-                        console.log("Account id: " + this.account.id);
-                        console.log("Repository id: " + this.account.projects[0].id);
                         let subscription = this._contributor.findOne({
                             where: {
                                 accountID: this.account.id,
@@ -163,7 +157,6 @@ export class ListOfGamesComponent implements OnInit, OnDestroy {
                             }
                         }).subscribe(
                             repositoryContributor => {
-                                console.log("Repository contributor:" + (<RepositoryContributor>repositoryContributor));
                                 let sub = this._achievement.create({
                                     "accountID": this.account.id,
                                     "gameID": game.id,
@@ -234,7 +227,6 @@ export class ListOfGamesComponent implements OnInit, OnDestroy {
                             let sub = this._achievement.deleteById(achievement.id).subscribe(
                                 result => {
                                     var notificationGameID = this.getHashCode(<String>game.id);
-                                    console.log("Notification game ID " + notificationGameID);
                                     LocalNotifications.cancel(notificationGameID);
                                     this.updateAccountGames();
                                     console.log("Game was removed from active games!");

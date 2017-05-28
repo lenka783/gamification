@@ -12,7 +12,7 @@ import frameModule = require("ui/frame");
 export class AppComponent {
     constructor(private _routerExtensions: RouterExtensions, private _account: AccountApi) {
         if (!this._account.isAuthenticated()) {
-            this._routerExtensions.navigate(['MainComponent']);
+            this._routerExtensions.navigate([""]);
         } else {
             this._routerExtensions.navigate(["profile"])
         }

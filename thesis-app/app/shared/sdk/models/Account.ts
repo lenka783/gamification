@@ -6,34 +6,34 @@ import {
 
 declare var Object: any;
 export interface AccountInterface {
-  firstName: string;
-  lastName: string;
-  dateOfBirth: Date;
-  contributorName?: string;
-  realm?: string;
-  username?: string;
-  password: string;
-  email: string;
-  emailVerified?: boolean;
-  verificationToken?: string;
-  id?: any;
+  "firstName": string;
+  "lastName": string;
+  "dateOfBirth": Date;
+  "contributorName"?: string;
+  "realm"?: string;
+  "username"?: string;
+  "password": string;
+  "email": string;
+  "emailVerified"?: boolean;
+  "verificationToken"?: string;
+  "id"?: any;
   accessTokens?: any[];
   games?: Game[];
   projects?: Repository[];
 }
 
 export class Account implements AccountInterface {
-  firstName: string;
-  lastName: string;
-  dateOfBirth: Date;
-  contributorName: string;
-  realm: string;
-  username: string;
-  password: string;
-  email: string;
-  emailVerified: boolean;
-  verificationToken: string;
-  id: any;
+  "firstName": string;
+  "lastName": string;
+  "dateOfBirth": Date;
+  "contributorName": string;
+  "realm": string;
+  "username": string;
+  "password": string;
+  "email": string;
+  "emailVerified": boolean;
+  "verificationToken": string;
+  "id": any;
   accessTokens: any[];
   games: Game[];
   projects: Repository[];
@@ -55,7 +55,7 @@ export class Account implements AccountInterface {
   **/
   public static factory(data: AccountInterface): Account{
     return new Account(data);
-  }  
+  }
   /**
   * @method getModelDefinition
   * @author Julien Ledun
@@ -68,47 +68,47 @@ export class Account implements AccountInterface {
       name: 'Account',
       plural: 'accounts',
       properties: {
-        firstName: {
+        "firstName": {
           name: 'firstName',
           type: 'string'
         },
-        lastName: {
+        "lastName": {
           name: 'lastName',
           type: 'string'
         },
-        dateOfBirth: {
+        "dateOfBirth": {
           name: 'dateOfBirth',
           type: 'Date'
         },
-        contributorName: {
+        "contributorName": {
           name: 'contributorName',
           type: 'string'
         },
-        realm: {
+        "realm": {
           name: 'realm',
           type: 'string'
         },
-        username: {
+        "username": {
           name: 'username',
           type: 'string'
         },
-        password: {
+        "password": {
           name: 'password',
           type: 'string'
         },
-        email: {
+        "email": {
           name: 'email',
           type: 'string'
         },
-        emailVerified: {
+        "emailVerified": {
           name: 'emailVerified',
           type: 'boolean'
         },
-        verificationToken: {
+        "verificationToken": {
           name: 'verificationToken',
           type: 'string'
         },
-        id: {
+        "id": {
           name: 'id',
           type: 'any'
         },
