@@ -1,13 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef } from "@angular/core";
-import { Router } from "@angular/router";
 import { Observable } from "data/observable";
 
 import { Page } from "ui/page";
-import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular"
+import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
+import { RouterExtensions } from "nativescript-angular/router";
 
 import { LoopBackConfig, Config, SideDrawerNavigation } from "../../shared/index";
 import { Account, Game, Repository } from "../../shared/sdk/models/index";
 import { GameApi, AccountApi, RepositoryApi } from "../../shared/sdk/services/index";
+
+import { isIOS, isAndroid } from "platform";
 
 import application = require("application");
 import LocalNotifications = require("nativescript-local-notifications");
@@ -25,13 +27,14 @@ export class ProfileComponent extends Observable implements OnInit {
     @ViewChild(RadSideDrawerComponent) drawerComponent: RadSideDrawerComponent;
     private drawer: SideDrawerType;
     private account: Account;
-    private IsIOsApp: boolean;
     private IsDrawerOpen: boolean;
     private sideDrawerNavigation: SideDrawerNavigation;
     private pageLoaded = false;
+    private isIOS = isIOS;
+    private isAndroid = isAndroid;
 
     constructor(
-        private _router: Router,
+        private _routerExtensions: RouterExtensions,
         private _page: Page,
         private _changeDetectionRef: ChangeDetectorRef,
         private _account: AccountApi,
@@ -40,7 +43,7 @@ export class ProfileComponent extends Observable implements OnInit {
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
-        this.sideDrawerNavigation = new SideDrawerNavigation(_router);
+        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions.router);
     }
 
     loadAccount() {
@@ -57,7 +60,6 @@ export class ProfileComponent extends Observable implements OnInit {
 
     ngOnInit() {
         this._page.actionBarHidden = false;
-        this.IsIOsApp = Config.IOS_APP;
         this.IsDrawerOpen = false;
         this.updateAccountInfo();
         this.printAccount();
@@ -126,11 +128,11 @@ export class ProfileComponent extends Observable implements OnInit {
 
     logout() {
         this._account.logout();
-        this._router.navigate([""]);
+        this._routerExtensions.navigate([""], { clearHistory: true });
         console.log("Account logged out!");
     }
 
     updateProfile() {
-        this._router.navigate(['updateProfile']);
+        this._routerExtensions.navigate(['updateProfile']);
     }
 }

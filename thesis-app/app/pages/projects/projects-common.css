@@ -1,6 +1,4 @@
 ListView {
-  margin-left: 10;
-  margin-right: 10;
   opacity: 0;
 }
 .visible {
@@ -11,7 +9,4 @@ ListView {
 @keyframes show {
   from { opacity: 0; }
   to { opacity: 1; }
-}
-.listViewLine {
-    padding: 15;
 }

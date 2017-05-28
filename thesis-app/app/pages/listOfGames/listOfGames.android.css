@@ -1,10 +1,6 @@
 ActionBar{
     padding-top: 10;
 }
-Label {
-    word-wrap: true;
-}
 Button {
-    margin-left: 3;
-    margin-right: 3;
+    margin-left: 2;
 }

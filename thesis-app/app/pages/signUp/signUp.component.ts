@@ -13,13 +13,13 @@ import { TextField } from "ui/text-field";
 
 import { DatePickerModalViewComponent, Dialogs } from "../../shared/modalViews/index";
 
-import {
-    Account,
-    AccountApi,
-    LoopBackConfig,
-    Config,
-    hasValidEmail
-} from "../../shared";
+import { Account } from "../../shared/sdk/models";
+import { AccountApi } from "../../shared/sdk/services";
+import { LoopBackConfig, Config, hasValidEmail } from "../../shared";
+
+import { isAndroid } from "platform";
+import { AndroidApplication, AndroidActivityBackPressedEventData } from "application";
+import application = require("application");
 
 @Component({
     selector: "signUp",
@@ -28,15 +28,14 @@ import {
     styleUrls: ["pages/signUp/signUp-common.css", "pages/signUp/signUp.css"]
 })
 
-export class SignUpComponent implements OnInit, OnDestroy {
+export class SignUpComponent implements OnInit {
 
     private account: Account = new Account();
+    private isLoading: Boolean;
     private dialogs: Dialogs;
 
-    @ViewChild("container") container: ElementRef;
     @ViewChild("firstName") firstName: ElementRef;
     @ViewChild("lastName") lastName: ElementRef;
-    @ViewChild("dateLabel") dateLabel: ElementRef;
     @ViewChild("dateButton") dateButton: ElementRef;
     @ViewChild("email") email: ElementRef;
     @ViewChild("password") password: ElementRef;
@@ -51,15 +50,24 @@ export class SignUpComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.isLoading = false;
         this._page.actionBarHidden = false;
-    }
-
-    ngOnDestroy() {
-        this._router.navigate(['MainComponent']);
+        //handles the back button pressed from profile page on android
+        if (isAndroid) {
+            application.android.on(
+                AndroidApplication.activityBackPressedEvent,
+                (data: AndroidActivityBackPressedEventData) => {
+                    if (this._account.isAuthenticated()) {
+                        data.cancel = true;
+                        this._account.logout();
+                        this._router.navigate([""]);
+                    }
+                });
+        }
     }
 
     dateButtonTap() {
-        let dateLabel = <Label>this.dateLabel.nativeElement;
+        this.isLoading = true;
         let dateButton = <Button>this.dateButton.nativeElement;
         let that = this;
         let currentDate = new Date();
@@ -71,11 +79,13 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
         this._modalService.showModal(DatePickerModalViewComponent, options)
             .then((dateresult: Date) => {
+                this.isLoading = false;
                 this.account.dateOfBirth = dateresult;
             });
     }
 
     register() {
+        this.isLoading = true;
         var accounts = this._account.find(account => {
             account.email == this.account.email;
         })
@@ -88,17 +98,21 @@ export class SignUpComponent implements OnInit, OnDestroy {
                             error => {
                                 console.log("Problem occured while connecting to server");
                                 this.dialogs.alert("Server connection failed", "Could not connect to the server, try again later.", "Ok");
+                                this.isLoading = false;
                             });
                     },
-                    error => this.registerErrorHandler());
+                    error => {
+                        this.registerErrorHandler();
+                        this.isLoading = false;
+                    });
             } else {
                 this.dialogs.alert("Error", "Passwords must match!", "Ok");
+                this.isLoading = false;
             }
         } else {
             this.dialogs.alert("Error", "There already is an account for given email.", "Ok");
+            this.isLoading = false;
         }
-
-
     }
 
     private registerErrorHandler() {

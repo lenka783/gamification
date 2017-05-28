@@ -1,33 +1,22 @@
+/*
+ * Color specifications for backgrounds and action bar.
+**/
 ActionBar {
     background-color: #2691d9;
     color: whitesmoke;
 }
 
-GridLayout, StackLayout, Page, ListView {
+GridLayout, StackLayout, Page {
     background-color: whitesmoke;
 }
 ListView {
+    background-color: whitesmoke;
     separator-color: whitesmoke;
 }
-.borderLayoutMargin  {
-    margin-left: 15;
-    margin-right: 15;
-    margin-bottom: 5;
-}
-.border {
-    padding: 15;
-    border-radius: 8px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #4d4d4d;
-}
-.listButton {
-    border-radius: 0;
-    margin: 0;
-    background-color: #d4e9f7;
-    color: black;
-}
 
+/*
+** Style specifications for custom made modal views.
+**/
 .dialogTitleLabel {
     border-width: 3px;
     border-style: solid;
@@ -45,23 +34,56 @@ ListView {
     font-size: 18;
     color: black;
 }
+
+/*
+** Border style specification.
+**/
+.border {
+    padding: 15;
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #4d4d4d;
+    margin-bottom: 5;
+}
+
+/*
+** Margin for pages main layouts specification.
+**/
+.layoutMargin  {
+    margin: 30;
+    margin-bottom: 15;
+}
+
+/*
+** Specification for inside list (projects, achievements) buttons.
+**/
+.listButton {
+    border-radius: 0;
+    margin: 0;
+    background-color: #d4e9f7;
+    color: black;
+    padding: 30;
+}
+
+/*
+** Buttons style specifications.
+*/
 Button {
     background-color: #2691d9;
     color: whitesmoke;
-    margin-left: 10;
-    margin-right: 10;
-    margin-bottom: 10;
     border-radius: 8px;
+    margin-bottom: 10;
     padding: 15;
 }
 Button:highlighted {
     animation-name: highlightButton;
-    animation-duration: 0.5s;
+    animation-duration: 1.5s;
     animation-fill-mode: forwards;
 }
 
 @keyframes highlightButton {
-    0% { background-color: #7dbde8; }
+    0% { background-color: #bedef4; }
     100% { background-color: #2691d9; }
 }
 .darkColoredButton {
@@ -70,12 +92,12 @@ Button:highlighted {
 }
 .darkColoredButton:highlighted {
     animation-name: highlightDark;
-    animation-duration: 0.5s;
+    animation-duration: 1.5s;
     animation-fill-mode: forwards;
 }
 
 @keyframes highlightDark {
-    0% { background-color: #2691d9; }
+    0% { background-color: #bedef4; }
     100% { background-color: #175782; }
 }
 .lightColoredButton {
@@ -84,7 +106,7 @@ Button:highlighted {
 }
 .lightColoredButton:highlighted {
     animation-name: highlightLight;
-    animation-duration: 0.5s;
+    animation-duration: 1.5s;
     animation-fill-mode: forwards;
 }
 
@@ -98,11 +120,11 @@ Button:highlighted {
 }
 .cancelButton:highlighted {
     animation-name: highlighCancel;
-    animation-duration: 0.5s;
+    animation-duration: 1.5s;
     animation-fill-mode: forwards;
 }
 
 @keyframes highlighCancel {
-    0% { background-color: #ff8080; }
+    0% { background-color: #ffcccc; }
     100% { background-color: #b30000; }
 }

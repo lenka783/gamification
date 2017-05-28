@@ -1,35 +1,6 @@
-GridLayout {
-    margin-top: 20;
-    margin-bottom:10;
-    margin-left: 10;
-    margin-right: 10;
-}
-StackLayout {
-    margin-left: 30;
-    margin-right: 30;
-}
 Label {
     margin-top: 5;
     margin-bottom: 5;
     text-align: center;
-    border-radius: 8px;
     padding: 15;
-}
-TextField {
-    margin-bottom:10;
-    margin-left: 10;
-    margin-right: 10;
-    padding: 15;
-}
-.save {
-    margin-top: 20;
-}
-.date-layout {
-    margin-top: 5;
-    margin-bottom: 5;
-    margin-left: 0;
-    margin-right: 0;
-}
-.date-label{
-    text-align: left;
 }

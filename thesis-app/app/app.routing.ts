@@ -12,7 +12,8 @@ import { AchievementsComponent } from "./pages/achievements/achievements.compone
 import { ProjectsComponent } from "./pages/projects/projects.component";
 
 export const routes = [
-    { path: "", component: MainComponent },
+    { path: "", redirectTo: "main", terminal: true, pathMatch: "full" },
+    { path: "main", component: MainComponent },
     { path: "signUp", component: SignUpComponent },
     { path: "login", component: LoginComponent },
     { path: "profile", component: ProfileComponent },

@@ -1,10 +1,6 @@
-GridLayout {
-    background-color: #f2f2f2;
-}
 ListView {
-  margin-left: 10;
-  margin-right: 10;
-  background-color: #f2f2f2;
+  margin-left: 5;
+  margin-right: 5;
   opacity: 0;
 }
 .visible {
@@ -17,25 +13,13 @@ ListView {
   to { opacity: 1; }
 }
 Label {
-    font-size:15;
+    font-size:14;
+    padding: 15;
 }
 Button {
     font-size: 18;
-    border-radius: 8px;
     margin-left: 5;
-    margin-right: 5;
-}
-.join {
-    margin-right: 5;
-    background-color: #4d4d4d;
-    color: whitesmoke;
-}
-.leave {
-    margin-left: 5;
-    background-color: maroon;
-    color: whitesmoke;
 }
 .listViewLine {
-    padding: 15;
-    height: 80;
+    padding: 20;
 }

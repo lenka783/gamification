@@ -1,26 +1,11 @@
-<GridLayout rows="auto, *">
-    <ActionBar title="Login">
-        <NavigationButton
-                text="Go Back"
-                android.systemIcon="ic_menu_back"
-                tap="onNavBtnTap"></NavigationButton>
-    </ActionBar>
-    <StackLayout #container row="1">
-        <TextField #email
-                   autocapitalizationType = "none"
-                   autocorrect="false"
-                   hint="email"
-                   class="border"
-                   [(ngModel)]="account.email"></TextField>
-        <TextField #password
-                   hint="password"
-                   secure="true"
-                   class="border"
-                   [(ngModel)]="account.password"></TextField>
-        <Button
-                text="Login"
-                (tap)="login()">
-        </Button>
+<ActionBar title="Login">
+    <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" tap="onNavBtnTap"></NavigationButton>
+</ActionBar>
+<GridLayout>
+    <StackLayout class="layoutMargin" [opacity]="isLoading ? 0.5 : 1">
+        <TextField #email autocapitalizationType="none" autocorrect="false" hint="email" class="border" [(ngModel)]="account.email"></TextField>
+        <TextField #password hint="password" secure="true" class="border" [(ngModel)]="account.password"></TextField>
+        <Button text="Login" (tap)="login()"></Button>
     </StackLayout>
     <ActivityIndicator [busy]="isLoading" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
 </GridLayout>

@@ -1,9 +1,6 @@
+ActionBar{
+    padding-top: 10;
+}
 .mainContentGrid {
-    margin-bottom: 50;
-}
-.profileInfoLine {
-    color: black;
-}
-.bottomButton {
-    margin-bottom: 40;
+    margin-bottom: 60;
 }

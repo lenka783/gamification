@@ -1,16 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef, Injectable, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
-import { Router } from "@angular/router";
 import { Observable } from "data/observable";
 
 import { Page } from "ui/page";
 import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
 import { ModalDialogService} from "nativescript-angular/modal-dialog";
+import { RouterExtensions } from "nativescript-angular/router";
 
 import { LoopBackConfig, Config, SideDrawerNavigation } from "../../shared/index";
 import { Account, Achievement, Game, Repository, RepositoryContributor } from "../../shared/sdk/models/index";
 import { AchievementApi, GameApi, AccountApi, RepositoryApi, RepositoryContributorApi } from "../../shared/sdk/services/index";
 import { Dialogs } from "../../shared/modalViews/index";
 
+import { isIOS, isAndroid } from "platform";
 import application = require("application");
 
 import LocalNotifications = require("nativescript-local-notifications");
@@ -28,14 +29,15 @@ export class AchievementsComponent extends Observable implements OnInit {
     @ViewChild(RadSideDrawerComponent) drawerComponent: RadSideDrawerComponent;
     private drawer: SideDrawerType;
     private account: Account;
-    private IsIOsApp: boolean;
     private IsDrawerOpen: boolean;
     private sideDrawerNavigation: SideDrawerNavigation;
     private listLoaded = false;
     private dialogs: Dialogs;
+    private isIOS = isIOS;
+    private isAndroid = isAndroid;
 
     constructor(
-        private _router: Router,
+        private _routerExtensions: RouterExtensions,
         private _page: Page,
         private _changeDetectionRef: ChangeDetectorRef,
         private _account: AccountApi,
@@ -47,7 +49,7 @@ export class AchievementsComponent extends Observable implements OnInit {
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
-        this.sideDrawerNavigation = new SideDrawerNavigation(_router);
+        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions.router);
         this.dialogs = new Dialogs(_modalService, vcRef);
     }
 
@@ -59,7 +61,6 @@ export class AchievementsComponent extends Observable implements OnInit {
 
     ngOnInit() {
         this._page.actionBarHidden = false;
-        this.IsIOsApp = Config.IOS_APP;
         this.IsDrawerOpen = false;
         this.updateGames();
     }
@@ -99,7 +100,7 @@ export class AchievementsComponent extends Observable implements OnInit {
 
     logout() {
         this._account.logout();
-        this._router.navigate([""]);
+        this._routerExtensions.navigate([""], { clearHistory: true });
         console.log("Account logged out!");
     }
 

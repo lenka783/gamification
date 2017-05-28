@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, ViewContainerRef } from "@angular/core";
-import { Router } from "@angular/router";
 import { Observable } from "data/observable";
 
 import { RadSideDrawerComponent, SideDrawerType } from "nativescript-telerik-ui/sidedrawer/angular";
 import { ModalDialogService } from "nativescript-angular/modal-dialog";
+import { RouterExtensions } from "nativescript-angular/router";
 
 import { Page } from "ui/page";
 
@@ -11,6 +11,7 @@ import { LoopBackConfig, Config, SideDrawerNavigation } from "../../shared";
 import { AccountApi } from "../../shared/sdk/services";
 import { Account } from "../../shared/sdk/models";
 import { Dialogs } from "../../shared/modalViews/index";
+import { isIOS, isAndroid } from "platform";
 
 
 @Component({
@@ -26,16 +27,17 @@ export class UpdateProfileComponent extends Observable implements OnInit {
 
     private drawer: SideDrawerType;
     private account: Account;
-    private IsIOsApp: boolean;
     private IsDrawerOpen: boolean;
     private sideDrawerNavigation: SideDrawerNavigation;
     private dialogs: Dialogs;
-    private firstName: String;
-    private lastName: String;
-    private contributorName: String;
+    private firstName;
+    private lastName;
+    private contributorName;
+    private isIOS = isIOS;
+    private isAndroid = isAndroid;
 
     constructor(
-        private _router: Router,
+        private _routerExtensions: RouterExtensions,
         private _page: Page,
         private _changeDetectionRef: ChangeDetectorRef,
         private _account: AccountApi,
@@ -45,7 +47,7 @@ export class UpdateProfileComponent extends Observable implements OnInit {
         LoopBackConfig.setBaseURL(Config.BASE_URL);
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         this.loadAccount();
-        this.sideDrawerNavigation = new SideDrawerNavigation(_router);
+        this.sideDrawerNavigation = new SideDrawerNavigation(_routerExtensions.router);
         this.dialogs = new Dialogs(_modalService, vcRef);
     }
 
@@ -60,7 +62,6 @@ export class UpdateProfileComponent extends Observable implements OnInit {
 
     ngOnInit() {
         this._page.actionBarHidden = false;
-        this.IsIOsApp = Config.IOS_APP;
         this.IsDrawerOpen = false;
         this.firstName = this.account.firstName;
         this.lastName = this.account.lastName;
@@ -87,7 +88,7 @@ export class UpdateProfileComponent extends Observable implements OnInit {
 
     logout() {
         this._account.logout();
-        this._router.navigate([""]);
+        this._routerExtensions.navigate([""], { clearHistory: true });
         console.log("Account logged out!");
     }
 
@@ -104,8 +105,11 @@ export class UpdateProfileComponent extends Observable implements OnInit {
             "contributorName": this.contributorName
         }).subscribe(
             () => {
+                this.account.firstName = this.firstName;
+                this.account.lastName = this.lastName;
+                this.account.contributorName = this.contributorName;
                 console.log("Profile updated!");
-                this._router.navigate(['profile']);
+                this._routerExtensions.navigate(['profile']);
             },
             error => console.log("ERROR: " + error.message)
         );

@@ -14,19 +14,19 @@ import { Router } from "@angular/router";
 
 export class MainComponent implements OnInit{
 
-    constructor(private router: Router, private page: Page){
+    constructor(private _router: Router, private _page: Page){
     }
 
     ngOnInit() {
-        this.page.actionBarHidden = false;
+        this._page.actionBarHidden = false;
     }
 
     signUp() {
-        this.router.navigate(['signUp']);
+        this._router.navigate(['signUp']);
     }
 
     login() {
-        this.router.navigate(['login']);
+        this._router.navigate(['login']);
     }
 
 }
