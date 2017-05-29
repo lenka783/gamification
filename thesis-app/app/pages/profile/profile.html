@@ -1,17 +1,8 @@
-<RadSideDrawer tkGamification tkToggleNavButton
-    (drawerOpening)="onDrawerOpening()" 
-    (drawerClosing)="onDrawerClosing()">
-    
+<RadSideDrawer tkGamification tkToggleNavButton (drawerOpening)="onDrawerOpening()" (drawerClosing)="onDrawerClosing()">
+
     <ActionBar title="Profile">
-        <NavigationButton 
-            icon="res://menu" 
-            [visibility]="isAndroid ? 'visible' : 'collapsed'" 
-            (tap)="IsDrawerOpen ? closeDrawer() : openDrawer()"></NavigationButton>
-        <ActionItem 
-            icon="res://menu" 
-            ios.position="left" 
-            [visibility]="isIOS ? 'visible' : 'collapsed'" 
-            (tap)="IsDrawerOpen ? closeDrawer() : openDrawer()"></ActionItem>
+        <NavigationButton icon="res://menu" [visibility]="isAndroid ? 'visible' : 'collapsed'" (tap)="IsDrawerOpen ? closeDrawer() : openDrawer()"></NavigationButton>
+        <ActionItem icon="res://menu" ios.position="left" [visibility]="isIOS ? 'visible' : 'collapsed'" (tap)="IsDrawerOpen ? closeDrawer() : openDrawer()"></ActionItem>
     </ActionBar>
 
     <StackLayout tkDrawerContent class="sideStackLayout">
@@ -26,38 +17,41 @@
         </GridLayout>
     </StackLayout>
 
-    <GridLayout tkMainContent class="mainContentGrid layoutMargin" [class.visible]="pageLoaded" rows="*, auto, ">
-        <GridLayout row="0" rows="auto, auto, auto, auto, auto, auto, auto">
-            <GridLayout columns="auto, *" class="border" row="0">
-                <Label col="0" text="Name: "></Label>
-                <Label col="1" [text]="account.firstName"></Label>
+    <StackLayout tkMainContent>
+        <GridLayout class="mainContentGrid layoutMargin" [class.visible]="pageLoaded" rows="*, auto, ">
+            <GridLayout row="0" rows="auto, auto, auto, auto, auto, auto, auto">
+                <GridLayout columns="auto, *" class="border" row="0">
+                    <Label col="0" text="Name: "></Label>
+                    <Label col="1" [text]="account.firstName"></Label>
+                </GridLayout>
+                <GridLayout columns="auto, *" class="border" row="1">
+                    <Label col="0" text="Surname: "></Label>
+                    <Label col="1" [text]="account.lastName"></Label>
+                </GridLayout>
+                <GridLayout columns="auto, *" class="border" row="2">
+                    <Label col="0" text="Email: "></Label>
+                    <Label col="1" [text]="account.email" textWrap="true"></Label>
+                </GridLayout>
+                <GridLayout columns="auto, *" class="border" row="3">
+                    <Label col="0" text="Date of birth: "></Label>
+                    <Label col="1" [text]='account.dateOfBirth | date:"fullDate"' textWrap="true"></Label>
+                </GridLayout>
+                <GridLayout columns="auto, *" class="border" row="4">
+                    <Label col="0" text="Contributor name: "></Label>
+                    <Label col="1" [text]="account.contributorName" textWrap="true"></Label>
+                </GridLayout>
+                <GridLayout columns="auto, *" class="border" row="5">
+                    <Label col="0" text="Active projects: "></Label>
+                    <Label col="1" [text]="account.projects.length"></Label>
+                </GridLayout>
+                <GridLayout columns="auto, *" class="border" row="6">
+                    <Label col="0" text="Active games: "></Label>
+                    <Label col="1" [text]="account.games.length"></Label>
+                </GridLayout>
             </GridLayout>
-            <GridLayout columns="auto, *" class="border" row="1">
-                <Label col="0" text="Surname: "></Label>
-                <Label col="1" [text]="account.lastName"></Label>
-            </GridLayout>
-            <GridLayout columns="auto, *" class="border" row="2">
-                <Label col="0" text="Email: "></Label>
-                <Label col="1" [text]="account.email" textWrap="true"></Label>
-            </GridLayout>
-            <GridLayout columns="auto, *" class="border" row="3">
-                <Label col="0" text="Date of birth: "></Label>
-                <Label col="1" [text]='account.dateOfBirth | date:"fullDate"' textWrap="true"></Label>
-            </GridLayout>
-            <GridLayout columns="auto, *" class="border" row="4">
-                <Label col="0" text="Contributor name: "></Label>
-                <Label col="1" [text]="account.contributorName" textWrap="true"></Label>
-            </GridLayout>
-            <GridLayout columns="auto, *" class="border" row="5">
-                <Label col="0" text="Active projects: "></Label>
-                <Label col="1" [text]="account.projects.length"></Label>
-            </GridLayout>
-            <GridLayout columns="auto, *" class="border" row="6">
-                <Label col="0" text="Active games: "></Label>
-                <Label col="1" [text]="account.games.length"></Label>
-            </GridLayout>
+            <Button text="Update profile" (tap)="updateProfile()" row="1"></Button>
         </GridLayout>
-        <Button text="Update profile" (tap)="updateProfile()" row="1"></Button>
-    </GridLayout>
+        <ActivityIndicator [busy]="isLoggingOut" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
+    </StackLayout>
 
 </RadSideDrawer>

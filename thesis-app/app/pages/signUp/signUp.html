@@ -1,7 +1,7 @@
 <ActionBar title="SignUp">
     <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" (tap)="onNavBtnTap()"></NavigationButton>
 </ActionBar>
-<GridLayout>
+<StackLayout>
     <StackLayout class="layoutMargin" [opacity]="isLoading ? 0.5 : 1">
         <TextField #firstName [(ngModel)]="account.firstName" autocorrect="false" hint="First Name" class="border"></TextField>
         <TextField #lastName [(ngModel)]="account.lastName" autocorrect="false" hint="Last Name" class="border"></TextField>
@@ -15,4 +15,4 @@
         <Button #submitButton text="Submit" (tap)="register()"></Button>
     </StackLayout>
     <ActivityIndicator [busy]="isLoading" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
-</GridLayout>
+</StackLayout>

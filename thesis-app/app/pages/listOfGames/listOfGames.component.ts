@@ -74,7 +74,7 @@ export class ListOfGamesComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.free();
         utils.GC();
     }
 
@@ -253,5 +253,15 @@ export class ListOfGamesComponent implements OnInit, OnDestroy {
         this._account.logout();
         this._routerExtensions.navigate([""], { clearHistory: true });
         console.log("Account logged out!");
+    }
+    
+    free() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.drawer = null;
+        this.account = null;
+        this.sideDrawerNavigation = null;
+        this.dialogs = null;
+        this.gameList = null;
+        this.project = null;
     }
 }

@@ -69,10 +69,11 @@ thesis-api/scripts user$  ./createGames.js
 
 Right now, you are good to go. 
 First, you need to have your mongoDB running. 
-Then, you should start loopback application. 
+Then, you should install dependencies and start your loopback application. 
 You can do that with wollowing commands: 
 ```
 $ cd thesis-api
+$ npm install
 $ npm start
 ```
 Then you can start NativeScript with following commands, you can use either ios:

@@ -17,7 +17,7 @@
         </GridLayout>
     </StackLayout>
 
-    <GridLayout tkMainContent rows="*, auto" class="mainContentGrid layoutMargin">
+    <StackLayout tkMainContent rows="*, auto" class="mainContentGrid layoutMargin">
         <GridLayout row="0" rows="auto, auto, auto">
             <GridLayout columns="*, auto" row="0">
                 <Label col="0" text="Name: "></Label>
@@ -33,6 +33,6 @@
             </GridLayout>
         </GridLayout>
         <Button text="Submit" (tap)="updateProfile()" row="1"></Button>
-    </GridLayout>
+    </StackLayout>
 
 </RadSideDrawer>

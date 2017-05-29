@@ -62,6 +62,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.free();
         utils.GC();
     }
 
@@ -126,5 +127,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     updateProfile() {
         this._routerExtensions.navigate(['updateProfile']);
+    }
+
+    free() {
+        this.drawer = null;
+        this.account = null;
+        this.sideDrawerNavigation = null;
     }
 }

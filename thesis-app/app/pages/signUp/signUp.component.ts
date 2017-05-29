@@ -68,6 +68,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.free();
         utils.GC();
     }
 
@@ -159,5 +160,10 @@ export class SignUpComponent implements OnInit, OnDestroy {
             && this.account.lastName != null
             && this.account.password != null
             && this.account.email != null;
+    }
+
+    free() {
+        this.account = null;
+        this.dialogs = null;
     }
 }

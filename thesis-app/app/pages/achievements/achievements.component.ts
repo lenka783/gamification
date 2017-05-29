@@ -63,7 +63,7 @@ export class AchievementsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.free();
         utils.GC();
     }
 
@@ -118,5 +118,13 @@ export class AchievementsComponent implements OnInit, OnDestroy {
             error => console.log("ERROR: " + error.message),
             () => subscription.unsubscribe()
         )
+    }
+    
+    free() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.drawer = null;
+        this.account = null;
+        this.sideDrawerNavigation = null;
+        this.dialogs = null;
     }
 }

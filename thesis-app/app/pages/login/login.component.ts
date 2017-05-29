@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from "@angular/core";
 import { ViewContainerRef } from "@angular/core";
 
 import { ModalDialogService } from "nativescript-angular/modal-dialog";
@@ -27,7 +27,7 @@ import application = require("application");
     styleUrls: ["pages/login/login-common.css", "pages/login/login.css"]
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     @ViewChild("email") email: ElementRef;
     @ViewChild("password") password: ElementRef;
 
@@ -45,8 +45,6 @@ export class LoginComponent implements OnInit {
         LoopBackConfig.setApiVersion(Config.API_VERSION);
         if (this._account.isAuthenticated())
             this._routerExtensions.navigate(['profile']);
-        this.account.email = "admin@thesis.cz";
-        this.account.password = "admin";
         this.dialogs = new Dialogs(_modalService, vcRef)
     }
 
@@ -67,11 +65,17 @@ export class LoginComponent implements OnInit {
         }
     }
 
+    ngOnDestroy() {
+        this.free();
+    }
+
     login() {
+        console.log("Login")
         this.isLoading = true;
         this._account.login(this.account)
             .subscribe(
             (res: AccessToken) => {
+                console.log("Login OK");
                 this._routerExtensions.navigate(['profile']);
                 this.isLoading = false;
             },
@@ -109,5 +113,10 @@ export class LoginComponent implements OnInit {
                 this.isLoading = false;},
             () => sub.unsubscribe()
         );
+    }
+
+    free() {
+        this.account = null;
+        this.dialogs = null;
     }
 }

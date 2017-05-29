@@ -26,7 +26,7 @@
         </GridLayout>
     </StackLayout>
 
-    <GridLayout tkMainContent class="mainContentGrid layoutMargin" rows="*">
+    <StackLayout tkMainContent class="mainContentGrid layoutMargin" rows="*">
         <ListView row="0" [items]="account.games" [class.visible]="listLoaded">
             <ng-template let-item="item">
                 <GridLayout>
@@ -34,6 +34,6 @@
                 </GridLayout>
             </ng-template>
         </ListView>
-    </GridLayout>
+    </StackLayout>
 
 </RadSideDrawer>

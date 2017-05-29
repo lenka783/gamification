@@ -68,6 +68,7 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.free();
         utils.GC();
     }
 
@@ -115,5 +116,15 @@ export class UpdateProfileComponent implements OnInit, OnDestroy {
             () => sub.unsubscribe()
         );
         
+    }
+
+    free() {
+        this.drawer = null;
+        this.account = null;
+        this.sideDrawerNavigation = null;
+        this.dialogs = null;
+        this.firstName = null;
+        this.lastName = null;
+        this.contributorName = null;
     }
 }
