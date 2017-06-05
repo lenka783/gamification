@@ -2,14 +2,14 @@
 Implementation of the bachelor thesis under Faculty of Informatics, Masaryk University.
 The thesis was realized with Y Soft Corporation, a.s., a strategic industrial partner of the Faculty of Informatics.
 
-#Technologies:
+## Technologies:
  * [MongoDB] (https://www.mongodb.com/)
  * [LoopBack] (http://loopback.io)
  * [Angular2] (https://angular.io/)
  * [NativeScript] (https://www.nativescript.org/)
  * [Node.js] (https://nodejs.org/en/)
 
-#Requirements
+## Requirements
  * [Install Node.js and NPM] (https://nodejs.org/en/)
  * [Install MongoDB] (https://docs.mongodb.com/getting-started/shell/installation/)
  * Install Strongloop and NativeScript using following:
@@ -26,7 +26,7 @@ The thesis was realized with Y Soft Corporation, a.s., a strategic industrial pa
       * [Android SDK] (https://developer.android.com/studio/index.html)
 
 
- #Setup
+ ## Setup
  First you need to setup database. Once your MongoDB is installed and running, you need to create an instance. You can do this either on your local machine or on a remote server. You can setup an instance using following commands:
  ```
  $ mongo
@@ -67,7 +67,7 @@ thesis-api/scripts user$  ./createGames.js
 ```
 
 
-#Start the application
+## Start the application
 
 Right now, you are good to go. 
 First, you need to have your mongoDB running. 
@@ -100,7 +100,7 @@ Afterwards you can run it using following:
 thesis-api/scripts user$  ./createTestData.js
 ```
 
-#Next steps
+## Next steps
 
 You can modify and use enclosed files createGames.js and createTestData.js when creating you own games or adding your own repositories.
 All you need to do is just replace test data with your actual data.
